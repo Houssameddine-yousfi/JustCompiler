@@ -20,14 +20,20 @@ public class Index {
     public static void main(String[] args) {
 
         Scanner in = new Scanner(System.in);
-        
              
             while (true) {
                 
                 System.out.println("Just>");
+                String line = in.nextLine();
+                Lexer lexer = new Lexer(line);
                 
-                String s = in.nextLine();
-                System.out.println( s);
+                while (true){
+                    SyntaxToken token = lexer.nextToken();
+                    if (token.getSyntaxKind() == SyntaxKind.endOfFile)
+                        break;
+                    
+                    System.out.print(token);
+                }
 
             }
 

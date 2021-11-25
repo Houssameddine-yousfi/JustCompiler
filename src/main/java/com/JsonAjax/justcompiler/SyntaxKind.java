@@ -10,5 +10,14 @@ package com.JsonAjax.justcompiler;
  * @author hyousfi
  */
 public enum SyntaxKind {
-    
+    number,
+    whiteSpace,
+    plus,
+    minus,
+    slash,
+    star,
+    leftParen,
+    rightParen,
+    badToken,
+    endOfFile
 }
