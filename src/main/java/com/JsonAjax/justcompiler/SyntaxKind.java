@@ -19,5 +19,6 @@ public enum SyntaxKind {
     leftParen,
     rightParen,
     badToken,
-    endOfFile
+    endOfFile, 
+    binaryExpression, numberExpression
 }

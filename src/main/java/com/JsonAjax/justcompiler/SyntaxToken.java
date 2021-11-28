@@ -23,7 +23,7 @@ public class SyntaxToken {
         this.value = value;
     }
 
-    public SyntaxKind getSyntaxKind() {
+    public SyntaxKind kind() {
         return syntaxKind;
     }
 

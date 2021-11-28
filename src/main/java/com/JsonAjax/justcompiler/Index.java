@@ -5,6 +5,8 @@
  */
 package com.JsonAjax.justcompiler;
 
+import com.JsonAjax.justcompiler.Parcing.ExpressionSyntax;
+import com.JsonAjax.justcompiler.Parcing.Parser;
 import java.io.Console;
 import java.util.Scanner;
 
@@ -25,15 +27,11 @@ public class Index {
                 
                 System.out.println("Just>");
                 String line = in.nextLine();
-                Lexer lexer = new Lexer(line);
                 
-                while (true){
-                    SyntaxToken token = lexer.nextToken();
-                    if (token.getSyntaxKind() == SyntaxKind.endOfFile)
-                        break;
-                    
-                    System.out.print(token);
-                }
+                Parser parser = new Parser(line);
+                ExpressionSyntax expression = parser.parse();
+                
+                expression.prettyPrint("");
 
             }
 
