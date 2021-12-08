@@ -32,12 +32,27 @@ public class BinaryExpressionSyntax extends ExpressionSyntax{
     
     @Override
     public void prettyPrint(String indentation){
-        System.out.println(indentation  + "BinaryExpression");
+        System.out.println( "BinaryExpression");
         
-        indentation = indentation.concat("    ");
-        left.prettyPrint(indentation);
-        System.out.println(indentation + operatorToken.kind());
-        right.prettyPrint(indentation);   
+
+        System.out.print(indentation+"├──");
+        left.prettyPrint("│   " + indentation);
+        System.out.println(indentation+"├──" + operatorToken.kind());
+        System.out.print(indentation+"└──");
+        right.prettyPrint(indentation + "    " );   
     }
 
+    public ExpressionSyntax getLeft() {
+        return left;
+    }
+
+    public ExpressionSyntax getRight() {
+        return right;
+    }
+
+    public SyntaxToken getOperatorToken() {
+        return operatorToken;
+    }
+    
+    
 }

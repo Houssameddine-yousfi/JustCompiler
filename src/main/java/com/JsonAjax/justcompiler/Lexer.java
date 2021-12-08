@@ -5,6 +5,8 @@
  */
 package com.JsonAjax.justcompiler;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author hyousfi
@@ -13,6 +15,7 @@ public class Lexer {
     
     private String text;
     private int position;
+    private ArrayList<String> diagnostics = new ArrayList<>();
     
     
     private char current(){
@@ -39,8 +42,13 @@ public class Lexer {
             while(Character.isDigit(current()))
                 next();
             
-            var text = this.text.substring(start, this.position);
-            int val = Integer.parseInt(text);
+            String text = this.text.substring(start, this.position);
+            int val = 0;
+            try{
+                val = Integer.parseInt(text);
+            }catch(NumberFormatException e){
+                this.diagnostics.add("The number " +text + " isn't a valid Int32." );
+            }
             return new SyntaxToken(SyntaxKind.number, start, text, val);
         }
         
@@ -49,7 +57,7 @@ public class Lexer {
             while(Character.isWhitespace(current()))
                 next();
             
-            var text = this.text.substring(start, this.position);
+            String text = this.text.substring(start, this.position);
             return new SyntaxToken(SyntaxKind.whiteSpace, start, text, null);
         }
         if(current() == '+')
@@ -64,11 +72,17 @@ public class Lexer {
             return new SyntaxToken(SyntaxKind.leftParen, this.position++, "(", null);
         if(current() == ')')
             return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
-        
+    
+        this.diagnostics.add("Error: bad charachter input '" + current() + "'");
         return new SyntaxToken(SyntaxKind.badToken, 
                 this.position++, 
                 text.substring(this.position - 1, this.position), 
                 null);
     }
+
+    public ArrayList<String> getDiagnostics() {
+        return diagnostics;
+    }
+    
     
 }

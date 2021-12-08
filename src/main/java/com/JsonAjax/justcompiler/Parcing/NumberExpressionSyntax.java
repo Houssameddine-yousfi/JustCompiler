@@ -31,7 +31,7 @@ public class NumberExpressionSyntax extends ExpressionSyntax {
 
     @Override
     public void prettyPrint(String indentation) {
-        System.out.println(indentation + numberToken.kind() + 
+        System.out.println( numberToken.kind() + 
                 " " + numberToken.getValue());
     }
     

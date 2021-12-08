@@ -16,7 +16,9 @@ import java.util.ArrayList;
  */
 public class Parser {
     
-    ArrayList<SyntaxToken> tokens = new ArrayList<>();
+    private ArrayList<SyntaxToken> tokens = new ArrayList<>();
+    private ArrayList<String> diagnostics = new ArrayList<>();
+    
     private int position = 0;
 
     public Parser(String text) {
@@ -30,6 +32,8 @@ public class Parser {
                 tokens.add(token);
             
         }while(token.kind() != SyntaxKind.endOfFile );
+        
+        this.diagnostics.addAll(lexer.getDiagnostics());
     }
     
     private SyntaxToken peek(int offset){
@@ -54,14 +58,37 @@ public class Parser {
         if(current().kind() == kind)
             return nextToken();
         
+        this.diagnostics.add("ERROR: Unexpected token <"+ current().kind() + 
+                ">, expected <" + kind + ">");
         return new SyntaxToken(kind, current().getPosition(), null, null);
     }
     
-    public ExpressionSyntax parse(){
-        ExpressionSyntax left = parsePrimayExpression();
+    public SyntaxTree parse(){
+        ExpressionSyntax expressionSyntax = parseTerm();
+        SyntaxToken endOfFile = match(SyntaxKind.endOfFile);
+        return new SyntaxTree(this.diagnostics, expressionSyntax, endOfFile);
+    }
+    
+    public ExpressionSyntax parseTerm(){
+        ExpressionSyntax left = parseFactor();
         
         while (current().kind() == SyntaxKind.plus ||
-                current().kind() == SyntaxKind.minus ){
+                current().kind() == SyntaxKind.minus){
+            
+            SyntaxToken operatorToken = nextToken();
+            ExpressionSyntax right = parseFactor();
+            left = new BinaryExpressionSyntax(left, operatorToken, right);
+            
+        }
+        
+        return left;
+    }
+    
+    public ExpressionSyntax parseFactor(){
+        ExpressionSyntax left = parsePrimayExpression();
+        
+        while (current().kind() == SyntaxKind.star ||
+                current().kind() == SyntaxKind.slash ){
             
             SyntaxToken operatorToken = nextToken();
             ExpressionSyntax right = parsePrimayExpression();
@@ -76,5 +103,11 @@ public class Parser {
         SyntaxToken numberToken = match(SyntaxKind.number);
         return new NumberExpressionSyntax(numberToken);
     }
+
+    public ArrayList<String> getDiagnostics() {
+        return diagnostics;
+    }
+    
+    
     
 }
