@@ -60,18 +60,22 @@ public class Lexer {
             String text = this.text.substring(start, this.position);
             return new SyntaxToken(SyntaxKind.whiteSpace, start, text, null);
         }
-        if(current() == '+')
-            return new SyntaxToken(SyntaxKind.plus, this.position++, "+", null);
-        if(current() == '-')
-            return new SyntaxToken(SyntaxKind.minus, this.position++, "-", null);
-        if(current() == '*')
-            return new SyntaxToken(SyntaxKind.star, this.position++, "*", null);
-        if(current() == '/')
-            return new SyntaxToken(SyntaxKind.slash, this.position++, "/", null);
-        if(current() == '(')
-            return new SyntaxToken(SyntaxKind.leftParen, this.position++, "(", null);
-        if(current() == ')')
-            return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
+
+        switch(current()){
+            case '+':
+                return new SyntaxToken(SyntaxKind.plus, this.position++, "+", null);
+            case '-':
+                return new SyntaxToken(SyntaxKind.minus, this.position++, "-", null);
+            case '*':
+                return new SyntaxToken(SyntaxKind.star, this.position++, "*", null);
+            case '/':
+                return new SyntaxToken(SyntaxKind.slash, this.position++, "/", null);
+            case '(':
+                return new SyntaxToken(SyntaxKind.leftParen, this.position++, "(", null);
+            case ')':
+                return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
+        }
+        
     
         this.diagnostics.add("Error: bad charachter input '" + current() + "'");
         return new SyntaxToken(SyntaxKind.badToken, 

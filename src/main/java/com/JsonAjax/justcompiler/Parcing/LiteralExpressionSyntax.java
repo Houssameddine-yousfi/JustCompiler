@@ -16,8 +16,8 @@ public class LiteralExpressionSyntax extends ExpressionSyntax {
 
     SyntaxToken numberToken;
 
-    public LiteralExpressionSyntax(SyntaxToken numberToken) {
-        this.numberToken = numberToken;
+    public LiteralExpressionSyntax(SyntaxToken LiteralToken) {
+        this.numberToken = LiteralToken;
     }
 
     @Override

@@ -53,7 +53,39 @@ public class Parser {
         SyntaxToken current = this.current();
         position ++;
         return current;
-    } 
+    }
+
+    private ExpressionSyntax parseExpression(int parentPrecedence){
+        var left = parsePrimayExpression();
+
+        while(true){
+            int precedence = GetBinaryOperatorPrecedence(current().kind());
+            if(precedence == 0 || precedence <= parentPrecedence)
+                break;
+            
+            SyntaxToken operatorToken = nextToken();
+            ExpressionSyntax right = parseExpression(precedence);
+            left = new BinaryExpressionSyntax(left, operatorToken, right);
+        }
+
+        return left;
+    }
+
+    private static int GetBinaryOperatorPrecedence(SyntaxKind kind){
+        switch(kind){
+            case star:
+            case slash:
+                return 2;
+
+            case plus:
+            case minus:
+                return 1;
+                
+            default:
+                return 0;
+        }
+    }
+
     
     private SyntaxToken matchToken(SyntaxKind kind){
         if(current().kind() == kind)
@@ -65,49 +97,49 @@ public class Parser {
     }
     
     public SyntaxTree parse(){
-        ExpressionSyntax expressionSyntax = parseExpression();
+        ExpressionSyntax expressionSyntax = parseExpression(0);
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
         return new SyntaxTree(this.diagnostics, expressionSyntax, endOfFile);
     }
     
-    public ExpressionSyntax parseTerm(){
-        ExpressionSyntax left = parseFactor();
+    // public ExpressionSyntax parseTerm(){
+    //     ExpressionSyntax left = parseFactor();
         
-        while (current().kind() == SyntaxKind.plus ||
-                current().kind() == SyntaxKind.minus){
+    //     while (current().kind() == SyntaxKind.plus ||
+    //             current().kind() == SyntaxKind.minus){
             
-            SyntaxToken operatorToken = nextToken();
-            ExpressionSyntax right = parseFactor();
-            left = new BinaryExpressionSyntax(left, operatorToken, right);
+    //         SyntaxToken operatorToken = nextToken();
+    //         ExpressionSyntax right = parseFactor();
+    //         left = new BinaryExpressionSyntax(left, operatorToken, right);
             
-        }
+    //     }
         
-        return left;
-    }
+    //     return left;
+    // }
     
-    public ExpressionSyntax parseFactor(){
-        ExpressionSyntax left = parsePrimayExpression();
+    // public ExpressionSyntax parseFactor(){
+    //     ExpressionSyntax left = parsePrimayExpression();
         
-        while (current().kind() == SyntaxKind.star ||
-                current().kind() == SyntaxKind.slash ){
+    //     while (current().kind() == SyntaxKind.star ||
+    //             current().kind() == SyntaxKind.slash ){
             
-            SyntaxToken operatorToken = nextToken();
-            ExpressionSyntax right = parsePrimayExpression();
-            left = new BinaryExpressionSyntax(left, operatorToken, right);
+    //         SyntaxToken operatorToken = nextToken();
+    //         ExpressionSyntax right = parsePrimayExpression();
+    //         left = new BinaryExpressionSyntax(left, operatorToken, right);
             
-        }
+    //     }
         
-        return left;
-    }
+    //     return left;
+    // }
     
-    private ExpressionSyntax parseExpression(){
-        return parseTerm();
-    }
+    // private ExpressionSyntax parseExpression(){
+    //     return parseTerm();
+    // }
     
     private ExpressionSyntax parsePrimayExpression(){
         if(current().kind() == SyntaxKind.leftParen){
             SyntaxToken left = nextToken();
-            ExpressionSyntax expression = parseExpression();
+            ExpressionSyntax expression = parseExpression(0);
             SyntaxToken right = matchToken(SyntaxKind.rightParen);
             
             return new ParenthesizedExpressionSyntax(left, expression, right);
