@@ -2,10 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.JsonAjax.justcompiler.Parcing;
-
-import com.JsonAjax.justcompiler.SyntaxKind;
-import com.JsonAjax.justcompiler.SyntaxToken;
+package com.JsonAjax.justcompiler.Syntax;
 
 /**
  *

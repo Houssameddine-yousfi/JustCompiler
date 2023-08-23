@@ -1,7 +1,4 @@
-package com.JsonAjax.justcompiler.Parcing;
-
-import com.JsonAjax.justcompiler.SyntaxKind;
-import com.JsonAjax.justcompiler.SyntaxToken;
+package com.JsonAjax.justcompiler.Syntax;
 
 public class UnaryExpressionSyntax extends ExpressionSyntax{
 

@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.JsonAjax.justcompiler.Parcing;
+package com.JsonAjax.justcompiler.Syntax;
 
-import com.JsonAjax.justcompiler.Lexer;
-import com.JsonAjax.justcompiler.SyntaxKind;
-import com.JsonAjax.justcompiler.SyntaxToken;
 import java.util.ArrayList;
 import java.util.List;
 

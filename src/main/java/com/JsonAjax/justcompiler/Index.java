@@ -5,13 +5,13 @@
  */
 package com.JsonAjax.justcompiler;
 
-import com.JsonAjax.justcompiler.Parcing.Evaluator;
-import com.JsonAjax.justcompiler.Parcing.ExpressionSyntax;
-import com.JsonAjax.justcompiler.Parcing.Parser;
-import com.JsonAjax.justcompiler.Parcing.SyntaxTree;
 import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
+
+import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.Parser;
+import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
 
 /**
  *

@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.JsonAjax.justcompiler.Parcing;
+package com.JsonAjax.justcompiler.Syntax;
 
 /**
  *
  * @author ajax
  */
-public abstract class ExpressionSyntax extends SyntaxNode {
-    
+public abstract class SyntaxNode {
+    public abstract SyntaxKind kind();
+    public abstract void prettyPrint(String indentation);
 }

@@ -1,6 +1,4 @@
-package com.JsonAjax.justcompiler.Parcing;
-
-import com.JsonAjax.justcompiler.SyntaxKind;
+package com.JsonAjax.justcompiler.Syntax;
 
 public class SyntaxFacts {
     
