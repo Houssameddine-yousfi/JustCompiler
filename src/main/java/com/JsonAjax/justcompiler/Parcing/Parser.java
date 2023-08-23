@@ -9,6 +9,7 @@ import com.JsonAjax.justcompiler.Lexer;
 import com.JsonAjax.justcompiler.SyntaxKind;
 import com.JsonAjax.justcompiler.SyntaxToken;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,8 +17,8 @@ import java.util.ArrayList;
  */
 public class Parser {
     
-    private ArrayList<SyntaxToken> tokens = new ArrayList<>();
-    private ArrayList<String> diagnostics = new ArrayList<>();
+    private List<SyntaxToken> tokens = new ArrayList<>();
+    private List<String> diagnostics = new ArrayList<>();
     
     private int position = 0;
 
@@ -54,7 +55,7 @@ public class Parser {
         return current;
     } 
     
-    private SyntaxToken match(SyntaxKind kind){
+    private SyntaxToken matchToken(SyntaxKind kind){
         if(current().kind() == kind)
             return nextToken();
         
@@ -64,8 +65,8 @@ public class Parser {
     }
     
     public SyntaxTree parse(){
-        ExpressionSyntax expressionSyntax = parseTerm();
-        SyntaxToken endOfFile = match(SyntaxKind.endOfFile);
+        ExpressionSyntax expressionSyntax = parseExpression();
+        SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
         return new SyntaxTree(this.diagnostics, expressionSyntax, endOfFile);
     }
     
@@ -107,16 +108,16 @@ public class Parser {
         if(current().kind() == SyntaxKind.leftParen){
             SyntaxToken left = nextToken();
             ExpressionSyntax expression = parseExpression();
-            SyntaxToken right = match(SyntaxKind.rightParen);
+            SyntaxToken right = matchToken(SyntaxKind.rightParen);
             
             return new ParenthesizedExpressionSyntax(left, expression, right);
         }
             
-        SyntaxToken numberToken = match(SyntaxKind.number);
-        return new NumberExpressionSyntax(numberToken);
+        SyntaxToken numberToken = matchToken(SyntaxKind.number);
+        return new LiteralExpressionSyntax(numberToken);
     }
 
-    public ArrayList<String> getDiagnostics() {
+    public List<String> getDiagnostics() {
         return diagnostics;
     }
     

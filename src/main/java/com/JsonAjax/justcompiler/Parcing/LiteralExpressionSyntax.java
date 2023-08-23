@@ -12,11 +12,11 @@ import com.JsonAjax.justcompiler.SyntaxToken;
  *
  * @author ajax
  */
-public class NumberExpressionSyntax extends ExpressionSyntax {
+public class LiteralExpressionSyntax extends ExpressionSyntax {
 
     SyntaxToken numberToken;
 
-    public NumberExpressionSyntax(SyntaxToken numberToken) {
+    public LiteralExpressionSyntax(SyntaxToken numberToken) {
         this.numberToken = numberToken;
     }
 

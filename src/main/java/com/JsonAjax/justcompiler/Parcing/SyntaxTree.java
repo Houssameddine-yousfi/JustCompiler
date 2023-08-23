@@ -6,6 +6,7 @@ package com.JsonAjax.justcompiler.Parcing;
 
 import com.JsonAjax.justcompiler.SyntaxToken;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,9 +15,9 @@ import java.util.ArrayList;
 public class SyntaxTree {
     private ExpressionSyntax root;
     private SyntaxToken endOfFile;
-    private ArrayList<String> diagnostics;
+    private List<String> diagnostics;
 
-    public SyntaxTree(ArrayList<String> diagnostics, ExpressionSyntax root, SyntaxToken endOfFile) {
+    public SyntaxTree(List<String> diagnostics, ExpressionSyntax root, SyntaxToken endOfFile) {
         this.root = root;
         this.endOfFile = endOfFile;
         this.diagnostics = diagnostics;
@@ -30,7 +31,7 @@ public class SyntaxTree {
         return endOfFile;
     }
 
-    public ArrayList<String> getDiagnostics() {
+    public List<String> getDiagnostics() {
         return diagnostics;
     }
     

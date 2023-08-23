@@ -24,8 +24,8 @@ public class Evaluator {
 
     private int evaluateExpression(ExpressionSyntax node) {
         
-        if(node instanceof NumberExpressionSyntax)
-            return (int) ((NumberExpressionSyntax) node).getNumberToken().getValue();
+        if(node instanceof LiteralExpressionSyntax)
+            return (int) ((LiteralExpressionSyntax) node).getNumberToken().getValue();
         
         if(node instanceof BinaryExpressionSyntax){
             int left = evaluateExpression(((BinaryExpressionSyntax)node).getLeft());

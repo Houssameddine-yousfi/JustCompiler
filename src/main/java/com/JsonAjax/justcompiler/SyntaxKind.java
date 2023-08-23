@@ -10,15 +10,20 @@ package com.JsonAjax.justcompiler;
  * @author hyousfi
  */
 public enum SyntaxKind {
-    number,
+    // Tokens
+    badToken,
+    endOfFile, 
     whiteSpace,
+    number,
     plus,
     minus,
     slash,
     star,
     leftParen,
     rightParen,
-    badToken,
-    endOfFile, 
-    binaryExpression, numberExpression, parenthesizedExpression
+    
+    // Expressions
+    binaryExpression,
+    numberExpression, 
+    parenthesizedExpression
 }
