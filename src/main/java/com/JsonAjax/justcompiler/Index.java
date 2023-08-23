@@ -37,15 +37,25 @@ public class Index {
 
         Scanner in = new Scanner(System.in);
              
-            while (true) {
+        boolean showATree = false;
+            while (true
+                    ) {
                 
                 System.out.println("Just>");
                 String line = in.nextLine();
                 
+                if(line.equals("#showTree")){
+                    showATree = !showATree;
+                                        continue;
+                }
+                if(line.equals("#exit")){
+                    System.exit(0);
+                }
+                
                 Parser parser = new Parser(line);
                 SyntaxTree ast = parser.parse();
                 
-                ast.getRoot().prettyPrint("");
+                if(showATree) ast.getRoot().prettyPrint("");
                 
                 List<String> diagnostics = ast.getDiagnostics();
                 
@@ -55,6 +65,7 @@ public class Index {
                         System.out.println(ANSI_RED + diagnostic + ANSI_RESET);
                     }
                 } else{
+                    
                     Evaluator evaluator = new Evaluator(ast.getRoot());
                     int val = evaluator.evaluate();
                     

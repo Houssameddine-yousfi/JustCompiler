@@ -45,6 +45,10 @@ public class Evaluator {
                 throw new AssertionError("Unexpected Binary operator " + operation);
         }
         
+        if(node instanceof ParenthesizedExpressionSyntax){
+            return evaluateExpression(((ParenthesizedExpressionSyntax) node).getExpression());
+        }
+        
         throw new AssertionError("Unexpected Node " + node);
 
     }

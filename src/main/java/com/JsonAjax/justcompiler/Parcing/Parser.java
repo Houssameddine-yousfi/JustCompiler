@@ -99,7 +99,19 @@ public class Parser {
         return left;
     }
     
+    private ExpressionSyntax parseExpression(){
+        return parseTerm();
+    }
+    
     private ExpressionSyntax parsePrimayExpression(){
+        if(current().kind() == SyntaxKind.leftParen){
+            SyntaxToken left = nextToken();
+            ExpressionSyntax expression = parseExpression();
+            SyntaxToken right = match(SyntaxKind.rightParen);
+            
+            return new ParenthesizedExpressionSyntax(left, expression, right);
+        }
+            
         SyntaxToken numberToken = match(SyntaxKind.number);
         return new NumberExpressionSyntax(numberToken);
     }
