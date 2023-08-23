@@ -26,6 +26,19 @@ public class Evaluator {
         
         if(node instanceof LiteralExpressionSyntax)
             return (int) ((LiteralExpressionSyntax) node).getNumberToken().getValue();
+
+        if(node instanceof UnaryExpressionSyntax){
+            int operand = evaluateExpression(((UnaryExpressionSyntax)node).getOperand());
+
+            SyntaxKind operator = ((UnaryExpressionSyntax)node).getOperatorToken().kind();
+            
+            if(operator == SyntaxKind.plus)
+                return operand;
+            else if(operator == SyntaxKind.minus)
+                return -operand;
+            else 
+                throw new AssertionError("Unexpected Unary operator " + operator);
+        }
         
         if(node instanceof BinaryExpressionSyntax){
             int left = evaluateExpression(((BinaryExpressionSyntax)node).getLeft());
