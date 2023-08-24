@@ -11,25 +11,25 @@ package com.JsonAjax.justcompiler.Syntax;
  */
 public class LiteralExpressionSyntax extends ExpressionSyntax {
 
-    SyntaxToken numberToken;
+    SyntaxToken literalToken;
 
     public LiteralExpressionSyntax(SyntaxToken LiteralToken) {
-        this.numberToken = LiteralToken;
+        this.literalToken = LiteralToken;
     }
 
     @Override
     public SyntaxKind kind() {
-        return SyntaxKind.numberExpression;
+        return SyntaxKind.literalExpression;
     }
 
-    public SyntaxToken getNumberToken() {
-        return numberToken;
+    public SyntaxToken getLiteralToken() {
+        return literalToken;
     }
 
     @Override
     public void prettyPrint(String indentation) {
-        System.out.println( numberToken.kind() + 
-                " " + numberToken.getValue());
+        System.out.println( literalToken.kind() + 
+                " " + literalToken.getValue());
     }
     
     

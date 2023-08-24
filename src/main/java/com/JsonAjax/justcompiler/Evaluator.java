@@ -4,6 +4,13 @@
  */
 package com.JsonAjax.justcompiler;
 
+import com.JsonAjax.justcompiler.Binding.BoundBinaryExpression;
+import com.JsonAjax.justcompiler.Binding.BoundBinaryOperatorKind;
+import com.JsonAjax.justcompiler.Binding.BoundExpression;
+import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
+import com.JsonAjax.justcompiler.Binding.BoundNodeKind;
+import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
+import com.JsonAjax.justcompiler.Binding.BoundUnaryOperatorKind;
 import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
@@ -17,9 +24,9 @@ import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
  */
 public class Evaluator {
     
-    private ExpressionSyntax root;
+    private BoundExpression root;
 
-    public Evaluator(ExpressionSyntax root) {
+    public Evaluator(BoundExpression root) {
         this.root = root;
     }
     
@@ -27,45 +34,49 @@ public class Evaluator {
         return evaluateExpression(this.root);
     }
 
-    private int evaluateExpression(ExpressionSyntax node) {
+    private int evaluateExpression(BoundExpression node) {
         
-        if(node instanceof LiteralExpressionSyntax)
-            return (int) ((LiteralExpressionSyntax) node).getNumberToken().getValue();
+        if(node instanceof BoundLiteralExpression)
+            return (int) ((BoundLiteralExpression) node).getValue();
 
-        if(node instanceof UnaryExpressionSyntax){
-            int operand = evaluateExpression(((UnaryExpressionSyntax)node).getOperand());
+        if(node instanceof BoundUnaryExpression){
+            int operand = evaluateExpression(((BoundUnaryExpression)node).getOperand());
 
-            SyntaxKind operator = ((UnaryExpressionSyntax)node).getOperatorToken().kind();
+            BoundUnaryOperatorKind operator = ((BoundUnaryExpression)node).getOperatorKind();
             
-            if(operator == SyntaxKind.plus)
-                return operand;
-            else if(operator == SyntaxKind.minus)
-                return -operand;
-            else 
-                throw new AssertionError("Unexpected Unary operator " + operator);
+            switch(operator){
+                case Identity:
+                    return operand;
+                case Negation:
+                    return -operand;
+                default:
+                    throw new AssertionError("Unexpected Unary operator " + operator);
+            }
         }
         
-        if(node instanceof BinaryExpressionSyntax){
-            int left = evaluateExpression(((BinaryExpressionSyntax)node).getLeft());
-            int right = evaluateExpression(((BinaryExpressionSyntax)node).getRight());
+        if(node instanceof BoundBinaryExpression){
+            int left = evaluateExpression(((BoundBinaryExpression)node).getLeft());
+            int right = evaluateExpression(((BoundBinaryExpression)node).getRight());
             
-            SyntaxKind operation = ((BinaryExpressionSyntax)node).getOperatorToken().kind();
+            BoundBinaryOperatorKind operation = ((BoundBinaryExpression)node).getOperatorKind();
             
-            if(operation == SyntaxKind.plus)
-                return left + right;
-            else if(operation == SyntaxKind.minus)
-                return left - right;
-            else if(operation == SyntaxKind.star)
-                return left * right;
-            else if(operation == SyntaxKind.slash)
-                return left / right;
-            else 
-                throw new AssertionError("Unexpected Binary operator " + operation);
+            switch (operation) {
+                case Addition:
+                    return left + right;
+                case Substraction:
+                    return left - right;
+                case Multiplication:
+                    return left * right;
+                case Division:   
+                    return left / right;
+                default:
+                    throw new AssertionError("Unexpected Binary operator " + operation);
+            }
         }
         
-        if(node instanceof ParenthesizedExpressionSyntax){
-            return evaluateExpression(((ParenthesizedExpressionSyntax) node).getExpression());
-        }
+        // if(node instanceof ParenthesizedExpressionSyntax){
+        //     return evaluateExpression(((ParenthesizedExpressionSyntax) node).getExpression());
+        // }
         
         throw new AssertionError("Unexpected Node " + node);
 

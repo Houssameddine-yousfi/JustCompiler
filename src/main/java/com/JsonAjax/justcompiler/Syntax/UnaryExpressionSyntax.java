@@ -13,7 +13,7 @@ public class UnaryExpressionSyntax extends ExpressionSyntax{
     
     @Override
     public SyntaxKind kind() {
-        return SyntaxKind.UnaryExpressionSyntax;
+        return SyntaxKind.unaryExpression;
     }
     
     @Override

@@ -9,6 +9,8 @@ import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
 
+import com.JsonAjax.justcompiler.Binding.Binder;
+import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.Parser;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
@@ -32,8 +34,9 @@ public class Index {
 
     /**
      * @param args the command line arguments
+     * @throws Exception
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Scanner in = new Scanner(System.in);
              
@@ -54,10 +57,15 @@ public class Index {
                 
                 Parser parser = new Parser(line);
                 SyntaxTree ast = parser.parse();
+                Binder binder = new Binder();
+                BoundExpression  boundExpression = binder.bindExpression(ast.getRoot());
+
+                List<String> diagnostics = ast.getDiagnostics();
+                diagnostics.addAll(binder.getDiagnostics());
                 
                 if(showATree) ast.getRoot().prettyPrint("");
                 
-                List<String> diagnostics = ast.getDiagnostics();
+                
                 
                 // if we find errors we display them else we evaluate
                 if(!diagnostics.isEmpty()){
@@ -66,7 +74,7 @@ public class Index {
                     }
                 } else{
                     
-                    Evaluator evaluator = new Evaluator(ast.getRoot());
+                    Evaluator evaluator = new Evaluator(boundExpression);
                     int val = evaluator.evaluate();
                     
                     System.out.println("" + val);
