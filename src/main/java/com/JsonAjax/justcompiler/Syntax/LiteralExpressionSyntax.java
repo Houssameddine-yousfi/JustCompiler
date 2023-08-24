@@ -12,9 +12,11 @@ package com.JsonAjax.justcompiler.Syntax;
 public class LiteralExpressionSyntax extends ExpressionSyntax {
 
     SyntaxToken literalToken;
+    Object value;
 
-    public LiteralExpressionSyntax(SyntaxToken LiteralToken) {
+    public LiteralExpressionSyntax(SyntaxToken LiteralToken, Object value) {
         this.literalToken = LiteralToken;
+        this.value = value;
     }
 
     @Override
@@ -31,6 +33,9 @@ public class LiteralExpressionSyntax extends ExpressionSyntax {
         System.out.println( literalToken.kind() + 
                 " " + literalToken.getValue());
     }
-    
+
+    public Object getValue() {
+        return value;
+    }
     
 }

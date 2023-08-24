@@ -21,6 +21,11 @@ public enum SyntaxKind {
     star,
     leftParen,
     rightParen,
+
+    //keywords
+    trueKeyword,
+    falseKeyword,
+    IdentifierToken,
     
     // Expressions
     binaryExpression,

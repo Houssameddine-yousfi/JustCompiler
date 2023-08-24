@@ -35,8 +35,8 @@ public class Binder {
     }
 
     private BoundExpression bindLiteralExpression(LiteralExpressionSyntax syntax) throws Exception{
-        Object value = syntax.getLiteralToken().getValue();
-        value = value==null?0:value;
+        Object value = syntax.getValue();
+        value = (value==null)?0:value;
         return new BoundLiteralExpression(value);
     }
 

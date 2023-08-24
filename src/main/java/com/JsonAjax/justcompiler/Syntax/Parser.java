@@ -96,16 +96,22 @@ public class Parser {
     }
     
     private ExpressionSyntax parsePrimayExpression(){
-        if(current().kind() == SyntaxKind.leftParen){
-            SyntaxToken left = nextToken();
-            ExpressionSyntax expression = parseExpression(0);
-            SyntaxToken right = matchToken(SyntaxKind.rightParen);
-            
-            return new ParenthesizedExpressionSyntax(left, expression, right);
+
+        switch(current().kind()){
+            case leftParen:
+                SyntaxToken left = nextToken();
+                ExpressionSyntax expression = parseExpression(0);
+                SyntaxToken right = matchToken(SyntaxKind.rightParen);
+                return new ParenthesizedExpressionSyntax(left, expression, right);
+            case trueKeyword:
+            case falseKeyword:
+                SyntaxToken keywordToken = nextToken();
+                Boolean value = current().kind() == SyntaxKind.trueKeyword;
+                return new LiteralExpressionSyntax(keywordToken, value);
+            default:
+                SyntaxToken numberToken = matchToken(SyntaxKind.number);
+                return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
         }
-            
-        SyntaxToken numberToken = matchToken(SyntaxKind.number);
-        return new LiteralExpressionSyntax(numberToken);
     }
 
     public List<String> getDiagnostics() {

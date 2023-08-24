@@ -8,15 +8,8 @@ import com.JsonAjax.justcompiler.Binding.BoundBinaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundBinaryOperatorKind;
 import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
-import com.JsonAjax.justcompiler.Binding.BoundNodeKind;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryOperatorKind;
-import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
-import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
 
 /**
  *
@@ -30,17 +23,17 @@ public class Evaluator {
         this.root = root;
     }
     
-    public int evaluate(){
+    public Object evaluate(){
         return evaluateExpression(this.root);
     }
 
-    private int evaluateExpression(BoundExpression node) {
+    private Object evaluateExpression(BoundExpression node) {
         
         if(node instanceof BoundLiteralExpression)
-            return (int) ((BoundLiteralExpression) node).getValue();
+            return ((BoundLiteralExpression) node).getValue();
 
         if(node instanceof BoundUnaryExpression){
-            int operand = evaluateExpression(((BoundUnaryExpression)node).getOperand());
+            int operand = (int) evaluateExpression(((BoundUnaryExpression)node).getOperand());
 
             BoundUnaryOperatorKind operator = ((BoundUnaryExpression)node).getOperatorKind();
             
@@ -55,8 +48,8 @@ public class Evaluator {
         }
         
         if(node instanceof BoundBinaryExpression){
-            int left = evaluateExpression(((BoundBinaryExpression)node).getLeft());
-            int right = evaluateExpression(((BoundBinaryExpression)node).getRight());
+            int left = (int) evaluateExpression(((BoundBinaryExpression)node).getLeft());
+            int right = (int) evaluateExpression(((BoundBinaryExpression)node).getRight());
             
             BoundBinaryOperatorKind operation = ((BoundBinaryExpression)node).getOperatorKind();
             

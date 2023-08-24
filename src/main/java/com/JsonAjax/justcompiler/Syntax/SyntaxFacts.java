@@ -27,4 +27,17 @@ public class SyntaxFacts {
                 return 0;
         }
     }
+
+    public static SyntaxKind getKeywordKind(String text) {
+        
+        switch (text){
+            case "true":
+                return SyntaxKind.trueKeyword;
+            case "false":
+                return SyntaxKind.falseKeyword;
+            default:
+                return SyntaxKind.IdentifierToken;
+        }
+
+    }
 }

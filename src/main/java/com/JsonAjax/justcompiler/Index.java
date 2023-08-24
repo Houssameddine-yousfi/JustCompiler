@@ -75,7 +75,7 @@ public class Index {
                 } else{
                     
                     Evaluator evaluator = new Evaluator(boundExpression);
-                    int val = evaluator.evaluate();
+                    Object val = evaluator.evaluate();
                     
                     System.out.println("" + val);
                 }
