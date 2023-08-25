@@ -49,7 +49,10 @@ public class Index {
                 
                 if(line.equals("#showTree")){
                     showATree = !showATree;
-                                        continue;
+                    if(showATree)
+                        System.out.println("Showing parse tree.");
+                    
+                    continue;
                 }
                 if(line.equals("#exit")){
                     System.exit(0);

@@ -68,6 +68,10 @@ public class Evaluator {
                     return (boolean) left && (boolean) right;
                 case LogicalOr:
                     return (boolean) left || (boolean) right;
+                case Equals:
+                    return left.equals(right);
+                case NotEquals:
+                    return !left.equals(right);
                 default:
                     throw new AssertionError("Unexpected Binary operator " + operation);
             }

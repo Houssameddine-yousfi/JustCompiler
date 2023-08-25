@@ -6,10 +6,14 @@ public class SyntaxFacts {
         switch(kind){
             case star:
             case slash:
-                return 4;
+                return 5;
 
             case plus:
             case minus:
+                return 4;
+
+            case equalsEquals:
+            case bangEquals:
                 return 3;
 
             case ampersandAmpersand:
@@ -28,7 +32,7 @@ public class SyntaxFacts {
             case plus:
             case minus:
             case bang:
-                return 5;
+                return 6;
 
             default:
                 return 0;

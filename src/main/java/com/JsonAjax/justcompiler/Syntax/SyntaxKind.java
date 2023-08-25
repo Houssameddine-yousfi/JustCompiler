@@ -24,6 +24,8 @@ public enum SyntaxKind {
     bang, 
     ampersandAmpersand, 
     pipePipe,
+    bangEquals, 
+    equalsEquals,
 
     //keywords
     trueKeyword,
@@ -34,5 +36,5 @@ public enum SyntaxKind {
     binaryExpression,
     unaryExpression,
     literalExpression, 
-    parenthesizedExpression
+    parenthesizedExpression, 
 }

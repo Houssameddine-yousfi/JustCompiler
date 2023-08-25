@@ -95,7 +95,10 @@ public class Lexer {
                 return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
             
             case '!':
-                return new SyntaxToken(SyntaxKind.bang, this.position++, "!", null);
+                if(lookahead() == '=')
+                    return new SyntaxToken(SyntaxKind.bangEquals, this.position+=2, "!=", null);
+                else
+                    return new SyntaxToken(SyntaxKind.bang, this.position++, "!", null);
             case '&':
                 if(lookahead() == '&')
                     return new SyntaxToken(SyntaxKind.ampersandAmpersand, this.position+=2, "&&", null);
@@ -103,6 +106,10 @@ public class Lexer {
             case '|':
                 if(lookahead() == '|')
                     return new SyntaxToken(SyntaxKind.pipePipe, this.position+=2, "||", null);
+                break;
+            case '=':
+                if(lookahead() == '=')
+                    return new SyntaxToken(SyntaxKind.equalsEquals, this.position+=2, "==", null);
                 break;
         }
         

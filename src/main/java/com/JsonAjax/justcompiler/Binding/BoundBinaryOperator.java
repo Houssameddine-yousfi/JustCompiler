@@ -50,6 +50,10 @@ public final class BoundBinaryOperator {
         new BoundBinaryOperator(SyntaxKind.slash, BoundBinaryOperatorKind.Division, Integer.class),
         new BoundBinaryOperator(SyntaxKind.ampersandAmpersand, BoundBinaryOperatorKind.LogicalAnd, Boolean.class),
         new BoundBinaryOperator(SyntaxKind.pipePipe, BoundBinaryOperatorKind.LogicalOr, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.equalsEquals, BoundBinaryOperatorKind.Equals, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.bangEquals, BoundBinaryOperatorKind.NotEquals, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.equalsEquals, BoundBinaryOperatorKind.Equals, Integer.class, Integer.class, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.bangEquals, BoundBinaryOperatorKind.NotEquals, Integer.class, Integer.class, Boolean.class),
     };
 
     public static BoundBinaryOperator bind(SyntaxKind syntaxKind, Class rightType, Class leftType){
