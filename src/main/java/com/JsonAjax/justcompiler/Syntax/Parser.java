@@ -106,7 +106,7 @@ public class Parser {
             case trueKeyword:
             case falseKeyword:
                 SyntaxToken keywordToken = nextToken();
-                Boolean value = current().kind() == SyntaxKind.trueKeyword;
+                Boolean value = keywordToken.kind() == SyntaxKind.trueKeyword;
                 return new LiteralExpressionSyntax(keywordToken, value);
             default:
                 SyntaxToken numberToken = matchToken(SyntaxKind.number);

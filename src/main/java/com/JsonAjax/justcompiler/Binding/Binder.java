@@ -76,36 +76,56 @@ public class Binder {
 
 
     private BoundUnaryOperatorKind bindUnaryOperatorKind(SyntaxKind kind, Class operandType) throws Exception {
-        if(operandType != Integer.class)
-            return null;
+        if (operandType == Integer.class) {
+            switch (kind) {
+                case plus:
+                    return BoundUnaryOperatorKind.Identity;
+                case minus:
+                    return BoundUnaryOperatorKind.Negation;
 
-        switch(kind){
-            case plus:
-                return BoundUnaryOperatorKind.Identity;
-            case minus:
-                return BoundUnaryOperatorKind.Negation;
-            default:
-                throw new Exception("Unexpected unary operator " + kind);
+            }
         }
+        
+        else if (operandType == Boolean.class) {
+            switch(kind) {
+                case bang:
+                    return BoundUnaryOperatorKind.LogicalNegation;
+            }
+        }
+        return null;
+
+        
     }
 
     private BoundBinaryOperatorKind bindBinaryOperatorKind(SyntaxKind kind, Class leftType, Class rightType) throws Exception {
         
-        if(leftType != Integer.class || rightType != Integer.class)
-            return null;
-        
-        switch(kind){
-            case plus:
-                return BoundBinaryOperatorKind.Addition;
-            case minus:
-                return BoundBinaryOperatorKind.Substraction;
-            case star:
-                return BoundBinaryOperatorKind.Multiplication;
-            case slash:
-                return BoundBinaryOperatorKind.Division;
-            default:
-                throw new Exception("Unexpected unary operator " + kind);
+        if(leftType == Integer.class && rightType == Integer.class) {
+            switch (kind) {
+                case plus:
+                    return BoundBinaryOperatorKind.Addition;
+                case minus:
+                    return BoundBinaryOperatorKind.Substraction;
+                case star:
+                    return BoundBinaryOperatorKind.Multiplication;
+                case slash:
+                    return BoundBinaryOperatorKind.Division;
+                default:
+                    throw new Exception("Unexpected unary operator " + kind);
+            }
         }
+
+        if(leftType == Boolean.class && rightType == Boolean.class) {
+            switch (kind) {
+                case ampersandAmpersand:
+                    return BoundBinaryOperatorKind.LogicalAnd;
+                case pipePipe:
+                    return BoundBinaryOperatorKind.LogicalOr;
+            }
+        }
+        
+        return null;
+        
+        
     }
 
     public List<String> getDiagnostics() {

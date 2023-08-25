@@ -21,6 +21,9 @@ public enum SyntaxKind {
     star,
     leftParen,
     rightParen,
+    bang, 
+    ampersandAmpersand, 
+    pipePipe,
 
     //keywords
     trueKeyword,
@@ -31,5 +34,5 @@ public enum SyntaxKind {
     binaryExpression,
     unaryExpression,
     literalExpression, 
-    parenthesizedExpression,
+    parenthesizedExpression
 }

@@ -19,10 +19,19 @@ public class Lexer {
     
     
     private char current(){
-        if(this.position >= text.length())
+        return peek(0);
+    }
+
+    private char lookahead(){
+        return peek(1);
+    }
+
+    private char peek(int offset){
+        int index = this.position + offset;
+        if(index >= text.length())
             return '\0';
         
-        return text.charAt(position);
+        return text.charAt(index);
     }
     
     private void next(){
@@ -84,6 +93,17 @@ public class Lexer {
                 return new SyntaxToken(SyntaxKind.leftParen, this.position++, "(", null);
             case ')':
                 return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
+            
+            case '!':
+                return new SyntaxToken(SyntaxKind.bang, this.position++, "!", null);
+            case '&':
+                if(lookahead() == '&')
+                    return new SyntaxToken(SyntaxKind.ampersandAmpersand, this.position+=2, "&&", null);
+                break;
+            case '|':
+                if(lookahead() == '|')
+                    return new SyntaxToken(SyntaxKind.pipePipe, this.position+=2, "||", null);
+                break;
         }
         
     

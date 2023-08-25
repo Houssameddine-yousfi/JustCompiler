@@ -33,35 +33,41 @@ public class Evaluator {
             return ((BoundLiteralExpression) node).getValue();
 
         if(node instanceof BoundUnaryExpression){
-            int operand = (int) evaluateExpression(((BoundUnaryExpression)node).getOperand());
+            Object operand = evaluateExpression(((BoundUnaryExpression)node).getOperand());
 
             BoundUnaryOperatorKind operator = ((BoundUnaryExpression)node).getOperatorKind();
             
             switch(operator){
                 case Identity:
-                    return operand;
+                    return (int) operand;
                 case Negation:
-                    return -operand;
+                    return - ((int) operand);
+                case LogicalNegation:
+                    return !((boolean) operand);
                 default:
                     throw new AssertionError("Unexpected Unary operator " + operator);
             }
         }
         
         if(node instanceof BoundBinaryExpression){
-            int left = (int) evaluateExpression(((BoundBinaryExpression)node).getLeft());
-            int right = (int) evaluateExpression(((BoundBinaryExpression)node).getRight());
+            Object left =  evaluateExpression(((BoundBinaryExpression)node).getLeft());
+            Object right = evaluateExpression(((BoundBinaryExpression)node).getRight());
             
             BoundBinaryOperatorKind operation = ((BoundBinaryExpression)node).getOperatorKind();
             
             switch (operation) {
                 case Addition:
-                    return left + right;
+                    return (int) left + (int) right;
                 case Substraction:
-                    return left - right;
+                    return (int) left - (int) right;
                 case Multiplication:
-                    return left * right;
+                    return (int) left * (int) right;
                 case Division:   
-                    return left / right;
+                    return (int) left / (int) right;
+                case LogicalAnd:
+                    return (boolean) left && (boolean) right;
+                case LogicalOr:
+                    return (boolean) left || (boolean) right;
                 default:
                     throw new AssertionError("Unexpected Binary operator " + operation);
             }
