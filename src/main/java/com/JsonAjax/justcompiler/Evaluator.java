@@ -35,7 +35,7 @@ public class Evaluator {
         if(node instanceof BoundUnaryExpression){
             Object operand = evaluateExpression(((BoundUnaryExpression)node).getOperand());
 
-            BoundUnaryOperatorKind operator = ((BoundUnaryExpression)node).getOperatorKind();
+            BoundUnaryOperatorKind operator = ((BoundUnaryExpression)node).getOperator().getKind();
             
             switch(operator){
                 case Identity:
@@ -53,7 +53,7 @@ public class Evaluator {
             Object left =  evaluateExpression(((BoundBinaryExpression)node).getLeft());
             Object right = evaluateExpression(((BoundBinaryExpression)node).getRight());
             
-            BoundBinaryOperatorKind operation = ((BoundBinaryExpression)node).getOperatorKind();
+            BoundBinaryOperatorKind operation = ((BoundBinaryExpression)node).getOperator().getKind();
             
             switch (operation) {
                 case Addition:

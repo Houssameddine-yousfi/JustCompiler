@@ -43,16 +43,16 @@ public class Binder {
     private BoundExpression bindBinaryExpression(BinaryExpressionSyntax syntax) throws Exception{
         BoundExpression boundLeft = bindExpression(syntax.getLeft());
         BoundExpression boundRight = bindExpression(syntax.getRight());
-        BoundBinaryOperatorKind boundOperatorKind = bindBinaryOperatorKind(syntax.getOperatorToken().kind(), boundLeft.getType(), boundRight.getType());
+        BoundBinaryOperator boundOperator = BoundBinaryOperator.bind(syntax.getOperatorToken().kind(), boundLeft.getType(), boundRight.getType());
 
-        if(boundOperatorKind == null){
+        if(boundOperator == null){
             this.diagnostics.add("Binary operator " + syntax.getOperatorToken().getText() 
                 + " is not defined for types " 
                 + boundLeft.getType() + " and "
                 + boundRight.getType());
             return boundLeft;
         }
-        return new BoundBinaryExpression(boundLeft, boundOperatorKind  , boundRight);
+        return new BoundBinaryExpression(boundLeft, boundOperator  , boundRight);
     }
     
 
@@ -65,13 +65,13 @@ public class Binder {
 
     private BoundExpression bindUnaryExpression(UnaryExpressionSyntax syntax) throws Exception {
         BoundExpression boundOperand = bindExpression(syntax.getOperand());
-        BoundUnaryOperatorKind boundOperatorKind = bindUnaryOperatorKind(syntax.getOperatorToken().kind(), boundOperand.getType());
-        if(boundOperatorKind == null){
+        BoundUnaryOperator boundOperator = BoundUnaryOperator.bind(syntax.getOperatorToken().kind(), boundOperand.getType());
+        if(boundOperator == null){
             this.diagnostics.add("Unary operator " + syntax.getOperatorToken().getText() + " is not defined for type " + boundOperand.getType());
             return boundOperand;
         }
 
-        return new BoundUnaryExpression(boundOperatorKind  , boundOperand);
+        return new BoundUnaryExpression(boundOperator  , boundOperand);
     }
 
 

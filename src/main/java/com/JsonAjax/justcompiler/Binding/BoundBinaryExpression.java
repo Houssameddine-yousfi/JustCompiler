@@ -4,12 +4,12 @@ public class BoundBinaryExpression extends BoundExpression{
 
     BoundExpression left;
     BoundExpression right;
-    BoundBinaryOperatorKind operatorKind;
+    BoundBinaryOperator operator;
 
-    public BoundBinaryExpression(BoundExpression left, BoundBinaryOperatorKind operatorKind, BoundExpression right){
+    public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator operator, BoundExpression right){
         this.left = left;
         this.right = right;
-        this.operatorKind = operatorKind;
+        this.operator = operator;
     }
 
     @Override
@@ -30,8 +30,8 @@ public class BoundBinaryExpression extends BoundExpression{
         return right;
     }
 
-    public BoundBinaryOperatorKind getOperatorKind() {
-        return operatorKind;
+    public BoundBinaryOperator getOperator() {
+        return operator;
     }
 
     

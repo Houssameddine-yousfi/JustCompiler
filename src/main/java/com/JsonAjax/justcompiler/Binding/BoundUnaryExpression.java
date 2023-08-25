@@ -2,12 +2,12 @@ package com.JsonAjax.justcompiler.Binding;
 
 public class BoundUnaryExpression extends BoundExpression {
     
-    BoundUnaryOperatorKind operatorKind;
+    BoundUnaryOperator operator;
     BoundExpression operand;
 
-    public BoundUnaryExpression(BoundUnaryOperatorKind operatorKind, 
+    public BoundUnaryExpression(BoundUnaryOperator operator, 
         BoundExpression operand){
-            this.operatorKind = operatorKind;
+            this.operator = operator;
             this.operand = operand;
     }
 
@@ -24,8 +24,8 @@ public class BoundUnaryExpression extends BoundExpression {
         return BoundNodeKind.UnaryExpression;
     }
 
-    public BoundUnaryOperatorKind getOperatorKind() {
-        return operatorKind;
+    public BoundUnaryOperator getOperator() {
+        return operator;
     }
 
     public BoundExpression getOperand() {
