@@ -58,7 +58,8 @@ public class Binder {
 
 
     private BoundExpression bindParenthesizedExpression(ParenthesizedExpressionSyntax syntax) throws Exception{
-        return null;
+        BoundExpression innerBoundExpression = bindExpression(syntax.getExpression());
+        return innerBoundExpression;
     }
 
     
@@ -75,58 +76,58 @@ public class Binder {
     }
 
 
-    private BoundUnaryOperatorKind bindUnaryOperatorKind(SyntaxKind kind, Class operandType) throws Exception {
-        if (operandType == Integer.class) {
-            switch (kind) {
-                case plus:
-                    return BoundUnaryOperatorKind.Identity;
-                case minus:
-                    return BoundUnaryOperatorKind.Negation;
+    // private BoundUnaryOperatorKind bindUnaryOperatorKind(SyntaxKind kind, Class operandType) throws Exception {
+    //     if (operandType == Integer.class) {
+    //         switch (kind) {
+    //             case plus:
+    //                 return BoundUnaryOperatorKind.Identity;
+    //             case minus:
+    //                 return BoundUnaryOperatorKind.Negation;
 
-            }
-        }
+    //         }
+    //     }
         
-        else if (operandType == Boolean.class) {
-            switch(kind) {
-                case bang:
-                    return BoundUnaryOperatorKind.LogicalNegation;
-            }
-        }
-        return null;
+    //     else if (operandType == Boolean.class) {
+    //         switch(kind) {
+    //             case bang:
+    //                 return BoundUnaryOperatorKind.LogicalNegation;
+    //         }
+    //     }
+    //     return null;
 
         
-    }
+    // }
 
-    private BoundBinaryOperatorKind bindBinaryOperatorKind(SyntaxKind kind, Class leftType, Class rightType) throws Exception {
+    // private BoundBinaryOperatorKind bindBinaryOperatorKind(SyntaxKind kind, Class leftType, Class rightType) throws Exception {
         
-        if(leftType == Integer.class && rightType == Integer.class) {
-            switch (kind) {
-                case plus:
-                    return BoundBinaryOperatorKind.Addition;
-                case minus:
-                    return BoundBinaryOperatorKind.Substraction;
-                case star:
-                    return BoundBinaryOperatorKind.Multiplication;
-                case slash:
-                    return BoundBinaryOperatorKind.Division;
-                default:
-                    throw new Exception("Unexpected unary operator " + kind);
-            }
-        }
+    //     if(leftType == Integer.class && rightType == Integer.class) {
+    //         switch (kind) {
+    //             case plus:
+    //                 return BoundBinaryOperatorKind.Addition;
+    //             case minus:
+    //                 return BoundBinaryOperatorKind.Substraction;
+    //             case star:
+    //                 return BoundBinaryOperatorKind.Multiplication;
+    //             case slash:
+    //                 return BoundBinaryOperatorKind.Division;
+    //             default:
+    //                 throw new Exception("Unexpected unary operator " + kind);
+    //         }
+    //     }
 
-        if(leftType == Boolean.class && rightType == Boolean.class) {
-            switch (kind) {
-                case ampersandAmpersand:
-                    return BoundBinaryOperatorKind.LogicalAnd;
-                case pipePipe:
-                    return BoundBinaryOperatorKind.LogicalOr;
-            }
-        }
+    //     if(leftType == Boolean.class && rightType == Boolean.class) {
+    //         switch (kind) {
+    //             case ampersandAmpersand:
+    //                 return BoundBinaryOperatorKind.LogicalAnd;
+    //             case pipePipe:
+    //                 return BoundBinaryOperatorKind.LogicalOr;
+    //         }
+    //     }
         
-        return null;
+    //     return null;
         
         
-    }
+    // }
 
     public List<String> getDiagnostics() {
         return diagnostics;
