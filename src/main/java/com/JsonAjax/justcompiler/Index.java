@@ -6,29 +6,82 @@
 package com.JsonAjax.justcompiler;
 
 import java.io.Console;
+import java.util.List;
 import java.util.Scanner;
+
+import com.JsonAjax.justcompiler.Binding.Binder;
+import com.JsonAjax.justcompiler.Binding.BoundExpression;
+import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.Parser;
+import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
 
 /**
  *
  * @author hyousfi
  */
 public class Index {
+    
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
 
     /**
      * @param args the command line arguments
+     * @throws Exception
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Scanner in = new Scanner(System.in);
-        
              
-            while (true) {
+        boolean showATree = false;
+            while (true
+                    ) {
                 
                 System.out.println("Just>");
+                String line = in.nextLine();
                 
-                String s = in.nextLine();
-                System.out.println( s);
+                if(line.equals("#showTree")){
+                    showATree = !showATree;
+                    if(showATree)
+                        System.out.println("Showing parse tree.");
+                    
+                    continue;
+                }
+                if(line.equals("#exit")){
+                    System.exit(0);
+                }
+                
+                Parser parser = new Parser(line);
+                SyntaxTree ast = parser.parse();
+                Binder binder = new Binder();
+                BoundExpression  boundExpression = binder.bindExpression(ast.getRoot());
 
+                List<String> diagnostics = ast.getDiagnostics();
+                diagnostics.addAll(binder.getDiagnostics());
+                
+                if(showATree) ast.getRoot().prettyPrint("");
+                
+                
+                
+                // if we find errors we display them else we evaluate
+                if(!diagnostics.isEmpty()){
+                    for (String diagnostic : diagnostics) {
+                        System.out.println(ANSI_RED + diagnostic + ANSI_RESET);
+                    }
+                } else{
+                    
+                    Evaluator evaluator = new Evaluator(boundExpression);
+                    Object val = evaluator.evaluate();
+                    
+                    System.out.println("" + val);
+                }
             }
 
         }

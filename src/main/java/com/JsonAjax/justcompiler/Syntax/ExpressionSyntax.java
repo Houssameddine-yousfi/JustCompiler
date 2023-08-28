@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.JsonAjax.justcompiler;
+package com.JsonAjax.justcompiler.Syntax;
 
 /**
  *
- * @author hyousfi
+ * @author ajax
  */
-public class SyntaxToken {
-    
-    private SyntaxKind syntaxKind;
-    private int position;
-    private String text;
-    
+public abstract class ExpressionSyntax extends SyntaxNode {
     
 }
