@@ -3,9 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.JsonAjax.justcompiler.Syntax;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.JsonAjax.justcompiler.DiagnosticsBag;
 
 /**
  *
@@ -14,9 +12,9 @@ import java.util.List;
 public class SyntaxTree {
     private ExpressionSyntax root;
     private SyntaxToken endOfFile;
-    private List<String> diagnostics;
+    private DiagnosticsBag diagnostics;
 
-    public SyntaxTree(List<String> diagnostics, ExpressionSyntax root, SyntaxToken endOfFile) {
+    public SyntaxTree(DiagnosticsBag diagnostics, ExpressionSyntax root, SyntaxToken endOfFile) {
         this.root = root;
         this.endOfFile = endOfFile;
         this.diagnostics = diagnostics;
@@ -30,7 +28,7 @@ public class SyntaxTree {
         return endOfFile;
     }
 
-    public List<String> getDiagnostics() {
+    public DiagnosticsBag getDiagnostics() {
         return diagnostics;
     }
     

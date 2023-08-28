@@ -4,11 +4,11 @@ package com.JsonAjax.justcompiler.Binding;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
 import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
 
 /**
@@ -16,7 +16,7 @@ import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
  */
 public class Binder {
 
-    private List<String> diagnostics = new ArrayList<>();
+    private DiagnosticsBag diagnostics = new DiagnosticsBag();
 
     public BoundExpression bindExpression(ExpressionSyntax syntax) throws Exception {
 
@@ -46,10 +46,10 @@ public class Binder {
         BoundBinaryOperator boundOperator = BoundBinaryOperator.bind(syntax.getOperatorToken().kind(), boundLeft.getType(), boundRight.getType());
 
         if(boundOperator == null){
-            this.diagnostics.add("Binary operator " + syntax.getOperatorToken().getText() 
-                + " is not defined for types " 
-                + boundLeft.getType() + " and "
-                + boundRight.getType());
+            this.diagnostics.reportUndefindBinaryOperator(syntax.getOperatorToken().getSpan(),
+                syntax.getOperatorToken().getText(),
+                boundLeft.getType(),
+                boundRight.getType());
             return boundLeft;
         }
         return new BoundBinaryExpression(boundLeft, boundOperator  , boundRight);
@@ -68,68 +68,14 @@ public class Binder {
         BoundExpression boundOperand = bindExpression(syntax.getOperand());
         BoundUnaryOperator boundOperator = BoundUnaryOperator.bind(syntax.getOperatorToken().kind(), boundOperand.getType());
         if(boundOperator == null){
-            this.diagnostics.add("Unary operator " + syntax.getOperatorToken().getText() + " is not defined for type " + boundOperand.getType());
+            this.diagnostics.reportUndefindUnaryOperator(syntax.getOperatorToken().getSpan(), syntax.getOperatorToken().getText(), boundOperand.getType());
             return boundOperand;
         }
 
         return new BoundUnaryExpression(boundOperator  , boundOperand);
     }
 
-
-    // private BoundUnaryOperatorKind bindUnaryOperatorKind(SyntaxKind kind, Class operandType) throws Exception {
-    //     if (operandType == Integer.class) {
-    //         switch (kind) {
-    //             case plus:
-    //                 return BoundUnaryOperatorKind.Identity;
-    //             case minus:
-    //                 return BoundUnaryOperatorKind.Negation;
-
-    //         }
-    //     }
-        
-    //     else if (operandType == Boolean.class) {
-    //         switch(kind) {
-    //             case bang:
-    //                 return BoundUnaryOperatorKind.LogicalNegation;
-    //         }
-    //     }
-    //     return null;
-
-        
-    // }
-
-    // private BoundBinaryOperatorKind bindBinaryOperatorKind(SyntaxKind kind, Class leftType, Class rightType) throws Exception {
-        
-    //     if(leftType == Integer.class && rightType == Integer.class) {
-    //         switch (kind) {
-    //             case plus:
-    //                 return BoundBinaryOperatorKind.Addition;
-    //             case minus:
-    //                 return BoundBinaryOperatorKind.Substraction;
-    //             case star:
-    //                 return BoundBinaryOperatorKind.Multiplication;
-    //             case slash:
-    //                 return BoundBinaryOperatorKind.Division;
-    //             default:
-    //                 throw new Exception("Unexpected unary operator " + kind);
-    //         }
-    //     }
-
-    //     if(leftType == Boolean.class && rightType == Boolean.class) {
-    //         switch (kind) {
-    //             case ampersandAmpersand:
-    //                 return BoundBinaryOperatorKind.LogicalAnd;
-    //             case pipePipe:
-    //                 return BoundBinaryOperatorKind.LogicalOr;
-    //         }
-    //     }
-        
-    //     return null;
-        
-        
-    // }
-
-    public List<String> getDiagnostics() {
+    public DiagnosticsBag getDiagnostics() {
         return diagnostics;
     }
     

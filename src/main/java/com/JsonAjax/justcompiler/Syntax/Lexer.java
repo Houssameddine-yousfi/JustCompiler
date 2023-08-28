@@ -7,6 +7,10 @@ package com.JsonAjax.justcompiler.Syntax;
 
 import java.util.ArrayList;
 
+import com.JsonAjax.justcompiler.Diagnostic;
+import com.JsonAjax.justcompiler.DiagnosticsBag;
+import com.JsonAjax.justcompiler.TextSpan;
+
 /**
  *
  * @author hyousfi
@@ -15,7 +19,7 @@ public class Lexer {
     
     private String text;
     private int position;
-    private ArrayList<String> diagnostics = new ArrayList<>();
+    private DiagnosticsBag diagnostics = new DiagnosticsBag();
     
     
     private char current(){
@@ -46,8 +50,10 @@ public class Lexer {
         if(this.position >= text.length())
             return new SyntaxToken(SyntaxKind.endOfFile, position, "\0", null);
         
+        var start = this.position;
+
         if(Character.isDigit(current())){
-            int start = this.position;
+            
             while(Character.isDigit(current()))
                 next();
             
@@ -56,13 +62,13 @@ public class Lexer {
             try{
                 val = Integer.parseInt(text);
             }catch(NumberFormatException e){
-                this.diagnostics.add("The number " +text + " isn't a valid Int32." );
+                this.diagnostics.reportInvalidNumber(new TextSpan(start, this.position-start),text,Integer.class );
             }
             return new SyntaxToken(SyntaxKind.number, start, text, val);
         }
         
         if(Character.isWhitespace(current())){
-            int start = this.position;
+            
             while(Character.isWhitespace(current()))
                 next();
             
@@ -71,7 +77,7 @@ public class Lexer {
         }
 
         if(Character.isLetter(current())){
-            int start = this.position;
+            
             while(Character.isLetter(current()))
                 next();
             
@@ -95,33 +101,41 @@ public class Lexer {
                 return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
             
             case '!':
-                if(lookahead() == '=')
-                    return new SyntaxToken(SyntaxKind.bangEquals, this.position+=2, "!=", null);
+                if(lookahead() == '='){
+                    this.position+=2;
+                    return new SyntaxToken(SyntaxKind.bangEquals, start, "!=", null);
+                }
                 else
                     return new SyntaxToken(SyntaxKind.bang, this.position++, "!", null);
             case '&':
-                if(lookahead() == '&')
-                    return new SyntaxToken(SyntaxKind.ampersandAmpersand, this.position+=2, "&&", null);
+                if(lookahead() == '&'){
+                    this.position+=2;
+                    return new SyntaxToken(SyntaxKind.ampersandAmpersand, start, "&&", null);
+                }
                 break;
             case '|':
-                if(lookahead() == '|')
-                    return new SyntaxToken(SyntaxKind.pipePipe, this.position+=2, "||", null);
+                if(lookahead() == '|'){
+                    this.position+=2;
+                    return new SyntaxToken(SyntaxKind.pipePipe, start, "||", null);
+                }
                 break;
             case '=':
-                if(lookahead() == '=')
-                    return new SyntaxToken(SyntaxKind.equalsEquals, this.position+=2, "==", null);
+                if(lookahead() == '='){
+                    this.position+=2;
+                    return new SyntaxToken(SyntaxKind.equalsEquals, start, "==", null);
+                }
                 break;
         }
         
     
-        this.diagnostics.add("Error: bad charachter input '" + current() + "'");
+        this.diagnostics.reportBadCharacter(position,current());
         return new SyntaxToken(SyntaxKind.badToken, 
                 this.position++, 
                 text.substring(this.position - 1, this.position), 
                 null);
     }
 
-    public ArrayList<String> getDiagnostics() {
+    public DiagnosticsBag getDiagnostics() {
         return diagnostics;
     }
     

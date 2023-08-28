@@ -6,6 +6,7 @@
 package com.JsonAjax.justcompiler;
 
 import java.io.Console;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,7 +64,7 @@ public class Index {
                 Binder binder = new Binder();
                 BoundExpression  boundExpression = binder.bindExpression(ast.getRoot());
 
-                List<String> diagnostics = ast.getDiagnostics();
+                DiagnosticsBag diagnostics = ast.getDiagnostics();
                 diagnostics.addAll(binder.getDiagnostics());
                 
                 if(showATree) ast.getRoot().prettyPrint("");
@@ -72,8 +73,20 @@ public class Index {
                 
                 // if we find errors we display them else we evaluate
                 if(!diagnostics.isEmpty()){
-                    for (String diagnostic : diagnostics) {
-                        System.out.println(ANSI_RED + diagnostic + ANSI_RESET);
+                    Iterator<Diagnostic> itr = diagnostics.iterator();
+                    while ( itr.hasNext()) {
+                        Diagnostic diag = itr.next();
+                        System.out.println();
+                        System.out.println(ANSI_RED + diag.getMessage() + ANSI_RESET);
+
+                        
+                        String prefix = line.substring(0,diag.getSpan().getStart());
+                        String error = line.substring(diag.getSpan().getStart(),diag.getSpan().getEnd());
+                        String suffix = line.substring(diag.getSpan().getEnd());
+
+                        System.out.println("    " + prefix + ANSI_RED + error + ANSI_RESET+ suffix);
+                        System.out.println();
+
                     }
                 } else{
                     
@@ -81,6 +94,7 @@ public class Index {
                     Object val = evaluator.evaluate();
                     
                     System.out.println("" + val);
+                    System.out.println();
                 }
             }
 

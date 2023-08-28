@@ -5,6 +5,8 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import com.JsonAjax.justcompiler.TextSpan;
+
 /**
  *
  * @author hyousfi
@@ -37,6 +39,10 @@ public class SyntaxToken {
 
     public Object getValue() {
         return value;
+    }
+
+    public TextSpan getSpan(){
+        return new TextSpan(position, this.text.length());
     }
 
     @Override

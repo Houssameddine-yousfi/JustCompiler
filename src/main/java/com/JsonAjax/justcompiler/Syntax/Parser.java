@@ -8,6 +8,9 @@ package com.JsonAjax.justcompiler.Syntax;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.JsonAjax.justcompiler.Diagnostic;
+import com.JsonAjax.justcompiler.DiagnosticsBag;
+
 /**
  *
  * @author ajax
@@ -15,7 +18,7 @@ import java.util.List;
 public class Parser {
     
     private List<SyntaxToken> tokens = new ArrayList<>();
-    private List<String> diagnostics = new ArrayList<>();
+    private DiagnosticsBag diagnostics = new DiagnosticsBag();
     
     private int position = 0;
 
@@ -84,8 +87,7 @@ public class Parser {
         if(current().kind() == kind)
             return nextToken();
         
-        this.diagnostics.add("ERROR: Unexpected token <"+ current().kind() + 
-                ">, expected <" + kind + ">");
+        this.diagnostics.reportUnexpectedToken(current().getSpan(),current().kind(), kind);
         return new SyntaxToken(kind, current().getPosition(), null, null);
     }
     
@@ -114,7 +116,7 @@ public class Parser {
         }
     }
 
-    public List<String> getDiagnostics() {
+    public DiagnosticsBag getDiagnostics() {
         return diagnostics;
     }
     
