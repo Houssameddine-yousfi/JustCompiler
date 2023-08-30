@@ -56,6 +56,11 @@ public class DiagnosticsBag implements Iterable {
         return this.diagnostics.isEmpty();
     }
 
+    public void reportUndefinedName(TextSpan span, String name) {
+        String message = "Variable " + name + " doesn't exist";
+        report(span, message);
+    }
+
 
     
 }

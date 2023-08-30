@@ -47,7 +47,7 @@ public class SyntaxFacts {
             case "false":
                 return SyntaxKind.falseKeyword;
             default:
-                return SyntaxKind.IdentifierToken;
+                return SyntaxKind.identifierToken;
         }
 
     }

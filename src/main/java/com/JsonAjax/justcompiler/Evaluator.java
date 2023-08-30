@@ -4,23 +4,30 @@
  */
 package com.JsonAjax.justcompiler;
 
+import java.util.Map;
+
+import com.JsonAjax.justcompiler.Binding.BoundAssignmentExpression;
 import com.JsonAjax.justcompiler.Binding.BoundBinaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundBinaryOperatorKind;
 import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryOperatorKind;
+import com.JsonAjax.justcompiler.Binding.BoundVariableExpression;
 
 /**
  *
  * @author ajax
  */
 public class Evaluator {
+
     
+    private Map<String, Object> variables;
     private BoundExpression root;
 
-    public Evaluator(BoundExpression root) {
+    public Evaluator(BoundExpression root,Map<String, Object> variables) {
         this.root = root;
+        this.variables = variables;
     }
     
     public Object evaluate(){
@@ -31,6 +38,15 @@ public class Evaluator {
         
         if(node instanceof BoundLiteralExpression)
             return ((BoundLiteralExpression) node).getValue();
+        
+        if(node instanceof BoundVariableExpression)
+            return variables.get(((BoundVariableExpression) node).getName());
+
+        if(node instanceof BoundAssignmentExpression){
+            Object value = evaluateExpression(((BoundAssignmentExpression)node).getExpression());
+            variables.put(((BoundAssignmentExpression)node).getName(), value);
+            return value;
+        }
 
         if(node instanceof BoundUnaryExpression){
             Object operand = evaluateExpression(((BoundUnaryExpression)node).getOperand());

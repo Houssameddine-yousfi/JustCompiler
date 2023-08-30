@@ -124,7 +124,8 @@ public class Lexer {
                     this.position+=2;
                     return new SyntaxToken(SyntaxKind.equalsEquals, start, "==", null);
                 }
-                break;
+                else
+                    return new SyntaxToken(SyntaxKind.equals, this.position++, "=", null);
         }
         
     

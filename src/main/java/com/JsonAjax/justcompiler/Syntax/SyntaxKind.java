@@ -21,7 +21,8 @@ public enum SyntaxKind {
     star,
     leftParen,
     rightParen,
-    bang, 
+    bang,
+    equals,
     ampersandAmpersand, 
     pipePipe,
     bangEquals, 
@@ -30,11 +31,13 @@ public enum SyntaxKind {
     //keywords
     trueKeyword,
     falseKeyword,
-    IdentifierToken,
+    identifierToken,
     
     // Expressions
     binaryExpression,
     unaryExpression,
     literalExpression, 
     parenthesizedExpression, 
+    nameExpression, 
+    assignmentExpression, 
 }
