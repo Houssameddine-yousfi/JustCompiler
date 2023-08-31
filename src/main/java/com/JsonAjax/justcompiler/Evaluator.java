@@ -22,10 +22,10 @@ import com.JsonAjax.justcompiler.Binding.BoundVariableExpression;
 public class Evaluator {
 
     
-    private Map<String, Object> variables;
+    private Map<VariableSymbol, Object> variables;
     private BoundExpression root;
 
-    public Evaluator(BoundExpression root,Map<String, Object> variables) {
+    public Evaluator(BoundExpression root,Map<VariableSymbol, Object> variables) {
         this.root = root;
         this.variables = variables;
     }
@@ -40,11 +40,11 @@ public class Evaluator {
             return ((BoundLiteralExpression) node).getValue();
         
         if(node instanceof BoundVariableExpression)
-            return variables.get(((BoundVariableExpression) node).getName());
+            return variables.get(((BoundVariableExpression) node).getVariable());
 
         if(node instanceof BoundAssignmentExpression){
             Object value = evaluateExpression(((BoundAssignmentExpression)node).getExpression());
-            variables.put(((BoundAssignmentExpression)node).getName(), value);
+            variables.put(((BoundAssignmentExpression)node).getVariable(), value);
             return value;
         }
 

@@ -1,9 +1,10 @@
 package com.JsonAjax.justcompiler.Binding;
 
-import java.net.BindException;
 import java.util.Map;
+import java.util.Optional;
 
 import com.JsonAjax.justcompiler.DiagnosticsBag;
+import com.JsonAjax.justcompiler.VariableSymbol;
 import com.JsonAjax.justcompiler.Syntax.AssignmentExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
@@ -17,10 +18,10 @@ import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
  */
 public class Binder {
 
-    Map<String, Object> variables;
+    Map<VariableSymbol, Object> variables;
     private DiagnosticsBag diagnostics = new DiagnosticsBag();
 
-    public Binder(Map<String, Object> variables){
+    public Binder(Map<VariableSymbol, Object> variables){
         this.variables = variables;
     }
 
@@ -49,29 +50,32 @@ public class Binder {
         String name = syntax.getIdentifierToken().getText();
         BoundExpression boundExpression = bindExpression(syntax.getExpression());
 
-        Object defaultValue = boundExpression.getType() == Integer.class
-            ? 0
-            : boundExpression.getType() == Boolean.class 
-            ? false
-            : null;
-        
-        if(defaultValue == null)
-            throw new Exception("Unsupported variable type: " + boundExpression.getType());
 
-        variables.put(name, defaultValue);
-        return new BoundAssignmentExpression(name, boundExpression);
+        Optional<VariableSymbol> existingvariable = variables.keySet().stream()
+            .filter(v -> name.equals(v.getName()))
+            .findFirst();
+        if(existingvariable.isPresent())
+            variables.remove(existingvariable.get());
+        
+        VariableSymbol variable = new VariableSymbol(name, boundExpression.getType());
+        variables.put(variable, null);
+
+        return new BoundAssignmentExpression(variable, boundExpression);
     }
 
     private BoundExpression bindNameExpression(NameExpressionSyntax syntax) {
         String name = syntax.getIdentifierToken().getText();
-        if(!variables.containsKey(name)){
+
+        Optional<VariableSymbol> variable = variables.keySet().stream()
+        .filter(v -> name.equals(v.getName()))
+        .findFirst();
+
+        if(variable.isEmpty()){
             diagnostics.reportUndefinedName(syntax.getIdentifierToken().getSpan(), name);
             return new BoundLiteralExpression(0);
         }
         
-        Object value = variables.get(name);
-        Class type = value.getClass();
-        return new BoundVariableExpression(name, type);
+        return new BoundVariableExpression(variable.get());
     }
 
     private BoundExpression bindLiteralExpression(LiteralExpressionSyntax syntax) throws Exception{

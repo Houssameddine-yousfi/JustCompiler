@@ -41,7 +41,7 @@ public class Index {
      */
     public static void main(String[] args) throws Exception {
 
-        Map<String,Object> variables = new HashMap<>();
+        Map<VariableSymbol,Object> variables = new HashMap<>();
 
         Scanner in = new Scanner(System.in);
              

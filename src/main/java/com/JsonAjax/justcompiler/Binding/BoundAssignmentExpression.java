@@ -1,12 +1,14 @@
 package com.JsonAjax.justcompiler.Binding;
 
+import com.JsonAjax.justcompiler.VariableSymbol;
+
 public class BoundAssignmentExpression extends BoundExpression {
 
-    private String name;
+    private VariableSymbol variable;
     private BoundExpression expression;
 
-    public BoundAssignmentExpression(String name, BoundExpression boundExpression) {
-        this.name = name;
+    public BoundAssignmentExpression(VariableSymbol variable, BoundExpression boundExpression) {
+        this.variable = variable;
         this.expression = boundExpression;
     }
 
@@ -21,11 +23,15 @@ public class BoundAssignmentExpression extends BoundExpression {
     }
 
     public String getName() {
-        return name;
+        return variable.getName();
     }
 
     public BoundExpression getExpression() {
         return expression;
+    }
+
+    public VariableSymbol getVariable() {
+        return variable;
     }
     
 }

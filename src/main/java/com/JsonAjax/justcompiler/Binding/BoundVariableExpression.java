@@ -1,19 +1,19 @@
 package com.JsonAjax.justcompiler.Binding;
 
+import com.JsonAjax.justcompiler.VariableSymbol;
+
 public class BoundVariableExpression extends BoundExpression{
 
-    private String name;
-    private Class type;
+    private VariableSymbol variable;
 
 
-    public BoundVariableExpression(String name, Class type) {
-        this.name = name;
-        this.type = type;
+    public BoundVariableExpression(VariableSymbol variable) {
+        this.variable=variable;
     }
 
     @Override
     public Class getType() {
-        return type;
+        return variable.getType();
     }
 
     @Override
@@ -22,7 +22,13 @@ public class BoundVariableExpression extends BoundExpression{
     }
 
     public String getName() {
-        return name;
+        return variable.getName();
     }
+
+    public VariableSymbol getVariable() {
+        return variable;
+    }
+
+    
     
 }

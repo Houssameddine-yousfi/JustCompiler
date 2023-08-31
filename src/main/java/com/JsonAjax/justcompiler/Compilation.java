@@ -17,12 +17,13 @@ public class Compilation {
         return syntax;
     }
 
-    public EvaluationResult evaluate(Map<String,Object> variables){
+    public EvaluationResult evaluate(Map<VariableSymbol,Object> variables){
         Binder binder = new Binder(variables);
         BoundExpression boundExpression;
         try {
             boundExpression = binder.bindExpression(syntax.getRoot());
         } catch (Exception e) {
+            e.printStackTrace();
             return new EvaluationResult(binder.getDiagnostics(),null);
         }
         
