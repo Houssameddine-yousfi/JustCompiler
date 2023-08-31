@@ -6,7 +6,10 @@
 package com.JsonAjax.justcompiler;
 
 import java.io.Console;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.JsonAjax.justcompiler.Binding.Binder;
@@ -38,52 +41,62 @@ public class Index {
      */
     public static void main(String[] args) throws Exception {
 
+        Map<VariableSymbol,Object> variables = new HashMap<>();
+
         Scanner in = new Scanner(System.in);
              
         boolean showATree = false;
-            while (true
-                    ) {
-                
-                System.out.println("Just>");
-                String line = in.nextLine();
-                
-                if(line.equals("#showTree")){
-                    showATree = !showATree;
-                    if(showATree)
-                        System.out.println("Showing parse tree.");
-                    
-                    continue;
-                }
-                if(line.equals("#exit")){
-                    System.exit(0);
-                }
-                
-                Parser parser = new Parser(line);
-                SyntaxTree ast = parser.parse();
-                Binder binder = new Binder();
-                BoundExpression  boundExpression = binder.bindExpression(ast.getRoot());
-
-                List<String> diagnostics = ast.getDiagnostics();
-                diagnostics.addAll(binder.getDiagnostics());
-                
-                if(showATree) ast.getRoot().prettyPrint("");
-                
-                
-                
-                // if we find errors we display them else we evaluate
-                if(!diagnostics.isEmpty()){
-                    for (String diagnostic : diagnostics) {
-                        System.out.println(ANSI_RED + diagnostic + ANSI_RESET);
-                    }
-                } else{
-                    
-                    Evaluator evaluator = new Evaluator(boundExpression);
-                    Object val = evaluator.evaluate();
-                    
-                    System.out.println("" + val);
-                }
+        while (true) {
+            
+            System.out.println("Just>");
+            String line = in.nextLine();
+            
+            if(line.equals("#showTree")){
+                showATree = !showATree;
+                System.out.println( showATree? "Showing parse tree." : "Hide parse tree.");
+                continue;
             }
 
+            if(line.equals("#exit")){
+                System.exit(0);
+            }
+            
+            Parser parser = new Parser(line);
+            SyntaxTree ast = parser.parse();
+            
+            Compilation compilation = new Compilation(ast);
+            EvaluationResult result = compilation.evaluate(variables);
+
+            
+            DiagnosticsBag diagnostics = result.getDiagnostics();
+            
+            if(showATree) ast.getRoot().prettyPrint("");
+            
+            
+            
+            // if we find errors we display them else we evaluate
+            if(!diagnostics.isEmpty()){
+                Iterator<Diagnostic> itr = diagnostics.iterator();
+                while ( itr.hasNext()) {
+                    Diagnostic diag = itr.next();
+                    System.out.println();
+                    System.out.println(ANSI_RED + diag.getMessage() + ANSI_RESET);
+
+                    
+                    String prefix = line.substring(0,diag.getSpan().getStart());
+                    String error = line.substring(diag.getSpan().getStart(),diag.getSpan().getEnd());
+                    String suffix = line.substring(diag.getSpan().getEnd());
+
+                    System.out.println("    " + prefix + ANSI_RED + error + ANSI_RESET+ suffix);
+                    System.out.println();
+
+                }
+            } else{
+                System.out.println("" + result.getValue());
+                System.out.println();
+            }
         }
 
     }
+
+}
