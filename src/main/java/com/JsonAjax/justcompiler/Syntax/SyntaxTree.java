@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.JsonAjax.justcompiler.Syntax;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 
 /**
@@ -32,7 +35,18 @@ public class SyntaxTree {
         return diagnostics;
     }
     
-    
+    public static List<SyntaxToken> ParseTokens(String text){
+        Lexer lexer = new Lexer(text);
+        ArrayList<SyntaxToken> tokens = new ArrayList<>();
+        while(true){
+            SyntaxToken token = lexer.nextToken();
+            if(token.kind() == SyntaxKind.endOfFile)
+                break;
+            
+            tokens.add(token);
+        }
+        return tokens;
+    }
     
     
     

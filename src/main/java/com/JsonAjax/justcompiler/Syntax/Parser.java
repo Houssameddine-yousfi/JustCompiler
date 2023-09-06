@@ -7,8 +7,6 @@ package com.JsonAjax.justcompiler.Syntax;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 
 /**

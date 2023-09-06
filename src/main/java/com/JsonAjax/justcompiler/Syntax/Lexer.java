@@ -5,9 +5,6 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.util.ArrayList;
-
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.TextSpan;
 
@@ -50,7 +47,7 @@ public class Lexer {
         if(this.position >= text.length())
             return new SyntaxToken(SyntaxKind.endOfFile, position, "\0", null);
         
-        var start = this.position;
+        int start = this.position;
 
         if(Character.isDigit(current())){
             
