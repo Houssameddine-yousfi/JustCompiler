@@ -35,7 +35,7 @@ public class SyntaxTree {
         return diagnostics;
     }
     
-    public static List<SyntaxToken> ParseTokens(String text){
+    public static List<SyntaxToken> parseTokens(String text){
         Lexer lexer = new Lexer(text);
         ArrayList<SyntaxToken> tokens = new ArrayList<>();
         while(true){

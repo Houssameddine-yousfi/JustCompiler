@@ -76,7 +76,7 @@ public class Parser {
 
     private ExpressionSyntax parseBinaryExpression(int parentPrecedence){
         ExpressionSyntax left; 
-        int unaryOperatorPrecedence = SyntaxFacts.GetUnaryOperatorPrecedence(current().kind());
+        int unaryOperatorPrecedence = SyntaxFacts.getUnaryOperatorPrecedence(current().kind());
 
         if(unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence){
             SyntaxToken operatorToken = nextToken();
@@ -87,7 +87,7 @@ public class Parser {
         }
 
         while(true){
-            int precedence = SyntaxFacts.GetBinaryOperatorPrecedence(current().kind());
+            int precedence = SyntaxFacts.getBinaryOperatorPrecedence(current().kind());
             if(precedence == 0 || precedence <= parentPrecedence)
                 break;
             

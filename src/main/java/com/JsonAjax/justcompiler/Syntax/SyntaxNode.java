@@ -5,11 +5,15 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.List;
+
+
 /**
  *
  * @author ajax
  */
-public abstract class SyntaxNode {
+public abstract class SyntaxNode{
     public abstract SyntaxKind kind();
     public abstract void prettyPrint(String indentation);
+    public abstract List<SyntaxNode> getChildren();
 }

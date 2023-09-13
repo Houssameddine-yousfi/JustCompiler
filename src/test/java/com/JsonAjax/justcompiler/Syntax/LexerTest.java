@@ -57,7 +57,7 @@ public class LexerTest {
     @MethodSource("getTokensStream")
     void lexer_lexes_Tokens(SyntaxKind kind, String text) {
         
-        List<SyntaxToken> tokens = SyntaxTree.ParseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
         assertEquals(1, tokens.size());
 
         SyntaxToken token = tokens.get(0);
@@ -149,7 +149,7 @@ public class LexerTest {
         
         String text = text1+text2;
 
-        List<SyntaxToken> tokens = SyntaxTree.ParseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
         assertEquals(2, tokens.size());
 
         SyntaxToken token = tokens.get(0);
@@ -170,7 +170,7 @@ public class LexerTest {
         
         String text = text1+sepText+text2;
 
-        List<SyntaxToken> tokens = SyntaxTree.ParseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
         assertEquals(3, tokens.size());
 
         SyntaxToken token = tokens.get(0);

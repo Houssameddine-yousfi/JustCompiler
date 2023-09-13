@@ -4,6 +4,10 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  *
  * @author ajax
@@ -44,6 +48,16 @@ public class ParenthesizedExpressionSyntax extends ExpressionSyntax{
 
     public SyntaxToken getRightParenthesisToken() {
         return rightParenthesisToken;
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.leftParenthesisToken);
+        list.add(this.expression);
+        list.add(this.rightParenthesisToken);
+        return list;
     }
     
     

@@ -5,6 +5,10 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  *
  * @author ajax
@@ -49,6 +53,16 @@ public class BinaryExpressionSyntax extends ExpressionSyntax{
 
     public SyntaxToken getOperatorToken() {
         return operatorToken;
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.left);
+        list.add(this.operatorToken);
+        list.add(this.right);
+        return list;
     }
     
     

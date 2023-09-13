@@ -1,5 +1,8 @@
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UnaryExpressionSyntax extends ExpressionSyntax{
 
     private ExpressionSyntax operand;
@@ -39,5 +42,14 @@ public class UnaryExpressionSyntax extends ExpressionSyntax{
 
     public SyntaxToken getOperatorToken() {
         return operatorToken;
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+       List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.operatorToken);
+        list.add(this.operand);
+        return list;
     }
 }

@@ -1,5 +1,9 @@
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class AssignmentExpressionSyntax extends ExpressionSyntax{
     SyntaxToken identifierToken;
     SyntaxToken equalsToken;
@@ -41,6 +45,16 @@ public class AssignmentExpressionSyntax extends ExpressionSyntax{
         System.out.println(indentation+"├──" + equalsToken.kind());
         System.out.print(indentation+"└──");
         expression.prettyPrint(indentation + "    " );   
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.identifierToken);
+        list.add(this.equalsToken);
+        list.add(this.expression);
+        return list;
     }
 
     

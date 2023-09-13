@@ -5,13 +5,16 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.JsonAjax.justcompiler.TextSpan;
 
 /**
  *
  * @author hyousfi
  */
-public class SyntaxToken {
+public class SyntaxToken extends SyntaxNode{
     
     private SyntaxKind syntaxKind;
     private int position;
@@ -48,6 +51,17 @@ public class SyntaxToken {
     @Override
     public String toString() {
         return "[" + syntaxKind + "," + text + "]";
+    }
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void prettyPrint(String indentation) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
     }
     
     

@@ -5,6 +5,10 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  *
  * @author ajax
@@ -36,6 +40,13 @@ public class LiteralExpressionSyntax extends ExpressionSyntax {
 
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.literalToken);
+        return list;
     }
     
 }
