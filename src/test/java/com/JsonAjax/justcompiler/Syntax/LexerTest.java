@@ -1,12 +1,13 @@
 package com.JsonAjax.justcompiler.Syntax;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -63,6 +64,15 @@ public class LexerTest {
         SyntaxToken token = tokens.get(0);
         assertEquals(token.kind(), kind);
         assertEquals(token.getText(), text);
+
+        assertEquals(0,token.getSpan().getStart());
+
+        String expectedTokenText = SyntaxFacts.getText(kind);
+        if(expectedTokenText == null)
+            return;
+
+        assertEquals(0 + expectedTokenText.length(),token.getSpan().getEnd());
+        assertEquals(expectedTokenText.length(),token.getSpan().getLength());
     }
 
     private static boolean requiresSeparator(SyntaxKind kind1, SyntaxKind kind2){
