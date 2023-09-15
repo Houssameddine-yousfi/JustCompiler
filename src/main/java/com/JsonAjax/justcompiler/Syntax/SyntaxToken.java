@@ -44,6 +44,7 @@ public class SyntaxToken extends SyntaxNode{
         return value;
     }
 
+    @Override
     public TextSpan getSpan(){
         return new TextSpan(position, this.text.length());
     }

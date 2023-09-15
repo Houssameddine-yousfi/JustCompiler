@@ -22,6 +22,11 @@ public class TextSpan {
 
     public int getEnd(){
         return start + length ;
+    }
+
+
+    public static TextSpan fromBounds(int start2, int end) {
+        return new TextSpan(start2, end - start2);
     } 
     
 }

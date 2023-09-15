@@ -119,22 +119,38 @@ public class Parser {
     private ExpressionSyntax parsePrimayExpression(){
         switch(current().kind()){
             case leftParen:
-                SyntaxToken left = nextToken();
-                ExpressionSyntax expression = parseExpression();
-                SyntaxToken right = matchToken(SyntaxKind.rightParen);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
+                return parseParenthesisedExpression();
             case trueKeyword:
             case falseKeyword:
-                SyntaxToken keywordToken = nextToken();
-                Boolean value = keywordToken.kind() == SyntaxKind.trueKeyword;
-                return new LiteralExpressionSyntax(keywordToken, value);
+                return parseBooleanLiteral();
             case identifierToken:
-                SyntaxToken identifierToken = nextToken();
-                return new NameExpressionSyntax(identifierToken);
+                return parseNameExpression();
             default:
-                SyntaxToken numberToken = matchToken(SyntaxKind.number);
-                return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
+                return parseNumberLiteral();
         }
+    }
+
+    private ExpressionSyntax parseNumberLiteral() {
+        SyntaxToken numberToken = matchToken(SyntaxKind.number);
+        return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
+    }
+
+    private ExpressionSyntax parseParenthesisedExpression() {
+        SyntaxToken left = nextToken();
+        ExpressionSyntax expression = parseExpression();
+        SyntaxToken right = matchToken(SyntaxKind.rightParen);
+        return new ParenthesizedExpressionSyntax(left, expression, right);
+    }
+
+    private ExpressionSyntax parseBooleanLiteral() {
+        SyntaxToken keywordToken = nextToken();
+        Boolean value = keywordToken.kind() == SyntaxKind.trueKeyword;
+        return new LiteralExpressionSyntax(keywordToken, value);
+    }
+
+    private ExpressionSyntax parseNameExpression() {
+        SyntaxToken identifierToken = matchToken(SyntaxKind.identifierToken);
+        return new NameExpressionSyntax(identifierToken);
     }
 
     public DiagnosticsBag getDiagnostics() {
