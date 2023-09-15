@@ -5,6 +5,7 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class SyntaxToken extends SyntaxNode{
     }
 
     @Override
-    public void prettyPrint(String indentation) {
+    public void prettyPrint(String indentation, PrintStream printStream) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
     }

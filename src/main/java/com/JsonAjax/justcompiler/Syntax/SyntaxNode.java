@@ -5,6 +5,7 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
 import java.util.List;
 
 import com.JsonAjax.justcompiler.TextSpan;
@@ -16,7 +17,7 @@ import com.JsonAjax.justcompiler.TextSpan;
  */
 public abstract class SyntaxNode{
     public abstract SyntaxKind kind();
-    public abstract void prettyPrint(String indentation);
+    public abstract void prettyPrint(String indentation,PrintStream printStream);
     public abstract List<SyntaxNode> getChildren();
     public TextSpan getSpan(){
         TextSpan first = getChildren().get(0).getSpan();

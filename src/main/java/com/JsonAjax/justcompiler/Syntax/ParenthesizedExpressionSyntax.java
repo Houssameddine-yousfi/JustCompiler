@@ -4,6 +4,7 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,11 @@ public class ParenthesizedExpressionSyntax extends ExpressionSyntax{
     }
 
     @Override
-    public void prettyPrint(String indentation) {
-        System.out.println( "ParenthesizedExpression");
+    public void prettyPrint(String indentation, PrintStream printStream) {
+        printStream.println( "ParenthesizedExpression");
         
-        System.out.print(indentation+"└──");
-        expression.prettyPrint(indentation + "    ");
+        printStream.print(indentation+"└──");
+        expression.prettyPrint(indentation + "    ", printStream);
     }
 
     public SyntaxToken getLeftParenthesisToken() {

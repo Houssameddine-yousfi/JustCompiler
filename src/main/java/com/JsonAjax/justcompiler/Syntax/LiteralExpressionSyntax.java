@@ -5,6 +5,7 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class LiteralExpressionSyntax extends ExpressionSyntax {
     }
 
     @Override
-    public void prettyPrint(String indentation) {
-        System.out.println( literalToken.kind() + 
+    public void prettyPrint(String indentation, PrintStream printStream) {
+        printStream.println( literalToken.kind() + 
                 " " + literalToken.getValue());
     }
 

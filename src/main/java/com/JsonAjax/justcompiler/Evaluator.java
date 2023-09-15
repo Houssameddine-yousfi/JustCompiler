@@ -81,7 +81,7 @@ public class Evaluator {
         Object operand = evaluateExpression(((BoundUnaryExpression) node).getOperand());
 
         BoundUnaryOperatorKind operator = ((BoundUnaryExpression) node).getOperator().getKind();
-
+        
         switch (operator) {
             case Identity:
                 return (int) operand;

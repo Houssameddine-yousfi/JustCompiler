@@ -70,7 +70,7 @@ public class Index {
             
             DiagnosticsBag diagnostics = result.getDiagnostics();
             
-            if(showATree) ast.getRoot().prettyPrint("");
+            if(showATree) ast.getRoot().prettyPrint("", System.out);
             
             
             

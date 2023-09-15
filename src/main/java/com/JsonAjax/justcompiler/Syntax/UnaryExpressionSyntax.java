@@ -1,5 +1,6 @@
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,12 @@ public class UnaryExpressionSyntax extends ExpressionSyntax{
     }
     
     @Override
-    public void prettyPrint(String indentation){
-        System.out.println( "UnaryExpression");
+    public void prettyPrint(String indentation, PrintStream printStream){
+        printStream.println( "UnaryExpression");
         
-        System.out.println(indentation+"├──" + operatorToken.kind());
-        System.out.print(indentation+"└──");
-        operand.prettyPrint(indentation + "    " );   
+        printStream.println(indentation+"├──" + operatorToken.kind());
+        printStream.print(indentation+"└──");
+        operand.prettyPrint(indentation + "    ", printStream );
     }
 
     
