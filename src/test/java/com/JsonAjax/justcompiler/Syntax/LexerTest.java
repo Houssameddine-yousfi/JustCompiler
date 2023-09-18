@@ -12,6 +12,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.JsonAjax.justcompiler.Text.SourceText;
+
 public class LexerTest {
     public static List<Arguments> getTokensList(){
         return  List.of(
@@ -58,7 +60,7 @@ public class LexerTest {
     @MethodSource("getTokensStream")
     void lexer_lexes_Tokens(SyntaxKind kind, String text) {
         
-        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(SourceText.from(text));
         assertEquals(1, tokens.size());
 
         SyntaxToken token = tokens.get(0);
@@ -159,7 +161,7 @@ public class LexerTest {
         
         String text = text1+text2;
 
-        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(SourceText.from(text));
         assertEquals(2, tokens.size());
 
         SyntaxToken token = tokens.get(0);
@@ -180,7 +182,7 @@ public class LexerTest {
         
         String text = text1+sepText+text2;
 
-        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(SourceText.from(text));
         assertEquals(3, tokens.size());
 
         SyntaxToken token = tokens.get(0);

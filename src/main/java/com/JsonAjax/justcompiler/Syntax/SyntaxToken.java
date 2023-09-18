@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.JsonAjax.justcompiler.TextSpan;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 /**
  *

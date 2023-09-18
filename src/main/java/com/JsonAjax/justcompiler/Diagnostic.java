@@ -1,5 +1,7 @@
 package com.JsonAjax.justcompiler;
 
+import com.JsonAjax.justcompiler.Text.TextSpan;
+
 public class Diagnostic {
     private TextSpan span;
     private String message;

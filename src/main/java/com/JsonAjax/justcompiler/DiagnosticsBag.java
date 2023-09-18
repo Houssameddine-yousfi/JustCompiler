@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 public class DiagnosticsBag implements Iterable {
     public Set<Diagnostic> diagnostics = new HashSet<>();

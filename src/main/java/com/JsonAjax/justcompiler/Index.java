@@ -17,6 +17,7 @@ import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.Parser;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
+import com.JsonAjax.justcompiler.Text.SourceText;
 
 /**
  *
@@ -61,8 +62,8 @@ public class Index {
                 System.exit(0);
             }
             
-            Parser parser = new Parser(line);
-            SyntaxTree ast = parser.parse();
+            
+            SyntaxTree ast = SyntaxTree.parse(line);
             
             Compilation compilation = new Compilation(ast);
             EvaluationResult result = compilation.evaluate(variables);
@@ -77,16 +78,25 @@ public class Index {
             // if we find errors we display them else we evaluate
             if(!diagnostics.isEmpty()){
                 Iterator<Diagnostic> itr = diagnostics.iterator();
+                SourceText text  = ast.getText();
                 while ( itr.hasNext()) {
                     Diagnostic diag = itr.next();
+                    
+                    int lineIndex = text.getLineIndex(diag.getSpan().getStart());
+                    int lineNumber = lineIndex +1;
+                    int character = diag.getSpan().getStart() - text.getLines().get(lineIndex).getStart() + 1;
+                    
                     System.out.println();
-                    System.out.println(ANSI_RED + diag.getMessage() + ANSI_RESET);
+                    System.out.print(ANSI_RED);
+                    System.out.print("[" + lineNumber + ", " + character + "): ]");
+                    System.out.println( diag.getMessage() + ANSI_RESET);
 
                     
                     String prefix = line.substring(0,diag.getSpan().getStart());
                     String error = line.substring(diag.getSpan().getStart(),diag.getSpan().getEnd());
                     String suffix = line.substring(diag.getSpan().getEnd());
 
+                    
                     System.out.println("    " + prefix + ANSI_RED + error + ANSI_RESET+ suffix);
                     System.out.println();
 

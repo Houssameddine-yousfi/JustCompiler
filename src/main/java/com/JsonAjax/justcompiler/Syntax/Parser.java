@@ -8,6 +8,7 @@ package com.JsonAjax.justcompiler.Syntax;
 import java.util.ArrayList;
 import java.util.List;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
+import com.JsonAjax.justcompiler.Text.SourceText;
 
 /**
  *
@@ -15,13 +16,15 @@ import com.JsonAjax.justcompiler.DiagnosticsBag;
  */
 public class Parser {
     
+    private SourceText text;
     private List<SyntaxToken> tokens = new ArrayList<>();
     private DiagnosticsBag diagnostics = new DiagnosticsBag();
     
     private int position = 0;
 
-    public Parser(String text) {
-        Lexer lexer = new Lexer(text);
+    public Parser(SourceText text) {
+        this.text = text;
+        Lexer lexer = new Lexer(text.toString());
         SyntaxToken token = null;
         do{
             token = lexer.nextToken();
@@ -113,7 +116,7 @@ public class Parser {
     public SyntaxTree parse(){
         ExpressionSyntax expressionSyntax = parseExpression();
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
-        return new SyntaxTree(this.diagnostics, expressionSyntax, endOfFile);
+        return new SyntaxTree(this.text, this.diagnostics, expressionSyntax, endOfFile);
     }
     
     private ExpressionSyntax parsePrimayExpression(){

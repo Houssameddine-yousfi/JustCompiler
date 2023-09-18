@@ -1,4 +1,4 @@
-package com.JsonAjax.justcompiler;
+package com.JsonAjax.justcompiler.Text;
 
 public class TextSpan {
     private int start;

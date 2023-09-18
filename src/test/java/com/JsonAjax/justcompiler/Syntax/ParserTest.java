@@ -24,8 +24,7 @@ public class ParserTest {
         String op2Text = SyntaxFacts.getText(op2);
 
         String text = "a "+ op1Text + " b " + op2Text + " c";
-        Parser parser = new Parser(text);
-        SyntaxTree ast = parser.parse();
+        SyntaxTree ast = SyntaxTree.parse(text);
 
         if (op1precedence >= op2precedence){
             AssertingList e = new AssertingList(ast.getRoot());
@@ -66,8 +65,8 @@ public class ParserTest {
         String binaryText = SyntaxFacts.getText(binaryKind);
 
         String text = unaryText + " a " + binaryText + " b";
-        Parser parser = new Parser(text);
-        SyntaxTree ast = parser.parse();
+        
+        SyntaxTree ast = SyntaxTree.parse(text);
 
         if (unaryPrecedence >= binaryPrecedence){
             AssertingList e = new AssertingList(ast.getRoot());

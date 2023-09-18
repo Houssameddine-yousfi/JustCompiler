@@ -12,6 +12,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.JsonAjax.justcompiler.Text.SourceText;
+
 public class SyntaxFactsTest {
     
     @ParameterizedTest
@@ -22,7 +24,7 @@ public class SyntaxFactsTest {
         if(text == null)
             return;
         
-        List<SyntaxToken> tokens = SyntaxTree.parseTokens(text);
+        List<SyntaxToken> tokens = SyntaxTree.parseTokens(SourceText.from(text));
         assertEquals(1,tokens.size());
         
         SyntaxToken token = tokens.get(0);

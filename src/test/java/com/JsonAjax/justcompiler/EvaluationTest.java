@@ -21,8 +21,7 @@ public class EvaluationTest {
     @ParameterizedTest
     @MethodSource("getExpressionAndEvaluation")
     public void  evaluaiton_roundTrips(String text, Object expectedValue){
-        Parser parser = new Parser(text);
-        SyntaxTree syntaxTree = parser.parse();
+        SyntaxTree syntaxTree = SyntaxTree.parse(text);
         Compilation compilation = new Compilation(syntaxTree);
         Map<VariableSymbol,Object> variables = new HashMap<>();
         EvaluationResult result = compilation.evaluate(variables);

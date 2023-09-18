@@ -6,7 +6,7 @@
 package com.JsonAjax.justcompiler.Syntax;
 
 import com.JsonAjax.justcompiler.DiagnosticsBag;
-import com.JsonAjax.justcompiler.TextSpan;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 /**
  *

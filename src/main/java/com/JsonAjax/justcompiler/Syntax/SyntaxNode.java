@@ -8,7 +8,7 @@ package com.JsonAjax.justcompiler.Syntax;
 import java.io.PrintStream;
 import java.util.List;
 
-import com.JsonAjax.justcompiler.TextSpan;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 
 /**
