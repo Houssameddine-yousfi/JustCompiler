@@ -7,7 +7,7 @@ public class TextSpan {
 
     public TextSpan(int start,int length){
         this.start = start;
-        this.length = length;
+        this.length = length>0?length:0;
     }
 
 
