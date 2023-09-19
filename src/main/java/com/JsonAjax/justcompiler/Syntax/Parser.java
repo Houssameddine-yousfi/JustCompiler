@@ -7,9 +7,8 @@ package com.JsonAjax.justcompiler.Syntax;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
+import com.JsonAjax.justcompiler.Text.SourceText;
 
 /**
  *
@@ -17,13 +16,15 @@ import com.JsonAjax.justcompiler.DiagnosticsBag;
  */
 public class Parser {
     
+    private SourceText text;
     private List<SyntaxToken> tokens = new ArrayList<>();
     private DiagnosticsBag diagnostics = new DiagnosticsBag();
     
     private int position = 0;
 
-    public Parser(String text) {
-        Lexer lexer = new Lexer(text);
+    public Parser(SourceText text) {
+        this.text = text;
+        Lexer lexer = new Lexer(text.toString());
         SyntaxToken token = null;
         do{
             token = lexer.nextToken();
@@ -78,7 +79,7 @@ public class Parser {
 
     private ExpressionSyntax parseBinaryExpression(int parentPrecedence){
         ExpressionSyntax left; 
-        int unaryOperatorPrecedence = SyntaxFacts.GetUnaryOperatorPrecedence(current().kind());
+        int unaryOperatorPrecedence = SyntaxFacts.getUnaryOperatorPrecedence(current().kind());
 
         if(unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence){
             SyntaxToken operatorToken = nextToken();
@@ -89,7 +90,7 @@ public class Parser {
         }
 
         while(true){
-            int precedence = SyntaxFacts.GetBinaryOperatorPrecedence(current().kind());
+            int precedence = SyntaxFacts.getBinaryOperatorPrecedence(current().kind());
             if(precedence == 0 || precedence <= parentPrecedence)
                 break;
             
@@ -115,28 +116,44 @@ public class Parser {
     public SyntaxTree parse(){
         ExpressionSyntax expressionSyntax = parseExpression();
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
-        return new SyntaxTree(this.diagnostics, expressionSyntax, endOfFile);
+        return new SyntaxTree(this.text, this.diagnostics, expressionSyntax, endOfFile);
     }
     
     private ExpressionSyntax parsePrimayExpression(){
         switch(current().kind()){
             case leftParen:
-                SyntaxToken left = nextToken();
-                ExpressionSyntax expression = parseExpression();
-                SyntaxToken right = matchToken(SyntaxKind.rightParen);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
+                return parseParenthesisedExpression();
             case trueKeyword:
             case falseKeyword:
-                SyntaxToken keywordToken = nextToken();
-                Boolean value = keywordToken.kind() == SyntaxKind.trueKeyword;
-                return new LiteralExpressionSyntax(keywordToken, value);
+                return parseBooleanLiteral();
             case identifierToken:
-                SyntaxToken identifierToken = nextToken();
-                return new NameExpressionSyntax(identifierToken);
+                return parseNameExpression();
             default:
-                SyntaxToken numberToken = matchToken(SyntaxKind.number);
-                return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
+                return parseNumberLiteral();
         }
+    }
+
+    private ExpressionSyntax parseNumberLiteral() {
+        SyntaxToken numberToken = matchToken(SyntaxKind.number);
+        return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
+    }
+
+    private ExpressionSyntax parseParenthesisedExpression() {
+        SyntaxToken left = nextToken();
+        ExpressionSyntax expression = parseExpression();
+        SyntaxToken right = matchToken(SyntaxKind.rightParen);
+        return new ParenthesizedExpressionSyntax(left, expression, right);
+    }
+
+    private ExpressionSyntax parseBooleanLiteral() {
+        SyntaxToken keywordToken = nextToken();
+        Boolean value = keywordToken.kind() == SyntaxKind.trueKeyword;
+        return new LiteralExpressionSyntax(keywordToken, value);
+    }
+
+    private ExpressionSyntax parseNameExpression() {
+        SyntaxToken identifierToken = matchToken(SyntaxKind.identifierToken);
+        return new NameExpressionSyntax(identifierToken);
     }
 
     public DiagnosticsBag getDiagnostics() {

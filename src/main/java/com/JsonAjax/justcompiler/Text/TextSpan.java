@@ -1,4 +1,4 @@
-package com.JsonAjax.justcompiler;
+package com.JsonAjax.justcompiler.Text;
 
 public class TextSpan {
     private int start;
@@ -7,7 +7,7 @@ public class TextSpan {
 
     public TextSpan(int start,int length){
         this.start = start;
-        this.length = length;
+        this.length = length>0?length:0;
     }
 
 
@@ -22,6 +22,11 @@ public class TextSpan {
 
     public int getEnd(){
         return start + length ;
+    }
+
+
+    public static TextSpan fromBounds(int start2, int end) {
+        return new TextSpan(start2, end - start2);
     } 
     
 }

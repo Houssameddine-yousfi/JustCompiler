@@ -5,140 +5,179 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.util.ArrayList;
-
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
-import com.JsonAjax.justcompiler.TextSpan;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 /**
  *
  * @author hyousfi
  */
 public class Lexer {
-    
+
     private String text;
-    private int position;
     private DiagnosticsBag diagnostics = new DiagnosticsBag();
-    
-    
-    private char current(){
+
+    private int position;
+
+    private int start;
+    private SyntaxKind kind;
+    private Object value;
+
+    private char current() {
         return peek(0);
     }
 
-    private char lookahead(){
+    private char lookahead() {
         return peek(1);
     }
 
-    private char peek(int offset){
+    private char peek(int offset) {
         int index = this.position + offset;
-        if(index >= text.length())
+        if (index >= text.length())
             return '\0';
-        
+
         return text.charAt(index);
     }
-    
-    private void next(){
+
+    private void next() {
         position++;
     }
 
     public Lexer(String text) {
         this.text = text;
     }
-    
-    public SyntaxToken nextToken(){
-        if(this.position >= text.length())
-            return new SyntaxToken(SyntaxKind.endOfFile, position, "\0", null);
-        
-        var start = this.position;
 
-        if(Character.isDigit(current())){
-            
-            while(Character.isDigit(current()))
-                next();
-            
-            String text = this.text.substring(start, this.position);
-            int val = 0;
-            try{
-                val = Integer.parseInt(text);
-            }catch(NumberFormatException e){
-                this.diagnostics.reportInvalidNumber(new TextSpan(start, this.position-start),text,Integer.class );
-            }
-            return new SyntaxToken(SyntaxKind.number, start, text, val);
-        }
-        
-        if(Character.isWhitespace(current())){
-            
-            while(Character.isWhitespace(current()))
-                next();
-            
-            String text = this.text.substring(start, this.position);
-            return new SyntaxToken(SyntaxKind.whiteSpace, start, text, null);
-        }
+    public SyntaxToken nextToken() {
 
-        if(Character.isLetter(current())){
-            
-            while(Character.isLetter(current()))
-                next();
-            
-            String text = this.text.substring(start, this.position);
-            SyntaxKind kind =  SyntaxFacts.getKeywordKind(text);
-            return new SyntaxToken(kind, start, text, null);
-        }
+        this.start = this.position;
+        this.kind = SyntaxKind.badToken;
+        this.value = null;
 
-        switch(current()){
+        switch (current()) {
+            case '\0':
+                this.kind = SyntaxKind.endOfFile;
+                break;
             case '+':
-                return new SyntaxToken(SyntaxKind.plus, this.position++, "+", null);
+                this.kind = SyntaxKind.plus;
+                this.position++;
+                break;
             case '-':
-                return new SyntaxToken(SyntaxKind.minus, this.position++, "-", null);
+                this.kind = SyntaxKind.minus;
+                this.position++;
+                break;
             case '*':
-                return new SyntaxToken(SyntaxKind.star, this.position++, "*", null);
+                this.kind = SyntaxKind.star;
+                this.position++;
+                break;
             case '/':
-                return new SyntaxToken(SyntaxKind.slash, this.position++, "/", null);
+                this.kind = SyntaxKind.slash;
+                this.position++;
+                break;
             case '(':
-                return new SyntaxToken(SyntaxKind.leftParen, this.position++, "(", null);
+                this.kind = SyntaxKind.leftParen;
+                this.position++;
+                break;
             case ')':
-                return new SyntaxToken(SyntaxKind.rightParen, this.position++, ")", null);
-            
+                this.kind = SyntaxKind.rightParen;
+                this.position++;
+                break;
+
             case '!':
-                if(lookahead() == '='){
-                    this.position+=2;
-                    return new SyntaxToken(SyntaxKind.bangEquals, start, "!=", null);
+                if (lookahead() == '=') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.bangEquals;
+                } else {
+                    this.kind = SyntaxKind.bang;
+                    this.position++;
                 }
-                else
-                    return new SyntaxToken(SyntaxKind.bang, this.position++, "!", null);
+                break;
             case '&':
-                if(lookahead() == '&'){
-                    this.position+=2;
-                    return new SyntaxToken(SyntaxKind.ampersandAmpersand, start, "&&", null);
+                if (lookahead() == '&') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.ampersandAmpersand;
                 }
                 break;
             case '|':
-                if(lookahead() == '|'){
-                    this.position+=2;
-                    return new SyntaxToken(SyntaxKind.pipePipe, start, "||", null);
+                if (lookahead() == '|') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.pipePipe;
                 }
                 break;
             case '=':
-                if(lookahead() == '='){
-                    this.position+=2;
-                    return new SyntaxToken(SyntaxKind.equalsEquals, start, "==", null);
+                if (lookahead() == '=') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.equalsEquals;
+                } else {
+                    this.kind = SyntaxKind.equals;
+                    this.position++;
                 }
-                else
-                    return new SyntaxToken(SyntaxKind.equals, this.position++, "=", null);
+                break;
+
+            // use cases for digits instead of Charachter.idDegit() for better performance
+            case '0': case '1': case '2': case '3': case '4':
+            case '5': case '6': case '7': case '8': case '9':
+                readNumberToken();
+                break;
+
+            // use the cases for common white spaces for better performance
+            case ' ':
+            case '\t':
+            case '\n':
+            case '\r':
+                readWhiteSpace();
+                break;
+            default:
+                if (Character.isLetter(current())) 
+                    readIdentifierOrKeyword();
+                else if (Character.isWhitespace(current())) 
+                    readWhiteSpace();
+                else {
+                    this.diagnostics.reportBadCharacter(position, current());
+                    this.position++;
+                }
         }
-        
-    
-        this.diagnostics.reportBadCharacter(position,current());
-        return new SyntaxToken(SyntaxKind.badToken, 
-                this.position++, 
-                text.substring(this.position - 1, this.position), 
-                null);
+
+        String tokenText = SyntaxFacts.getText(this.kind);
+        if (tokenText == null)
+            tokenText = this.text.substring(this.start, this.position);
+
+        return new SyntaxToken(kind, this.start, tokenText, this.value);
+
+    }
+
+    private void readIdentifierOrKeyword() {
+        while (Character.isLetter(current()))
+            next();
+
+        String text = this.text.substring(this.start, this.position);
+        this.kind = SyntaxFacts.getKeywordKind(text);
+
+    }
+
+    private void readWhiteSpace() {
+        while (Character.isWhitespace(current()))
+            next();
+        this.kind = SyntaxKind.whiteSpace;
+    }
+
+    private void readNumberToken() {
+        while (Character.isDigit(current()))
+            next();
+
+        String text = this.text.substring(this.start, this.position);
+        int val = 0;
+        try {
+            val = Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            this.diagnostics.reportInvalidNumber(new TextSpan(this.start, this.position - this.start), text,
+                    Integer.class);
+        }
+        this.value = val;
+        this.kind = SyntaxKind.number;
     }
 
     public DiagnosticsBag getDiagnostics() {
         return diagnostics;
     }
-    
-    
+
 }

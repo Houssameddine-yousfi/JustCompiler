@@ -5,25 +5,22 @@
  */
 package com.JsonAjax.justcompiler;
 
-import java.io.Console;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.JsonAjax.justcompiler.Binding.Binder;
-import com.JsonAjax.justcompiler.Binding.BoundExpression;
-import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
-import com.JsonAjax.justcompiler.Syntax.Parser;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
+import com.JsonAjax.justcompiler.Text.SourceText;
+import com.JsonAjax.justcompiler.Text.TextLine;
+import com.JsonAjax.justcompiler.Text.TextSpan;
 
 /**
  *
  * @author hyousfi
  */
 public class Index {
-    
+
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -34,67 +31,98 @@ public class Index {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-
     /**
      * @param args the command line arguments
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
 
-        Map<VariableSymbol,Object> variables = new HashMap<>();
+        Map<VariableSymbol, Object> variables = new HashMap<>();
 
+        StringBuilder textBuilder = new StringBuilder();
         Scanner in = new Scanner(System.in);
-             
+
         boolean showATree = false;
         while (true) {
-            
-            System.out.println("Just>");
+
+            if (textBuilder.length() == 0)
+                System.out.print("Just> ");
+            else
+                System.out.print("|     ");
+
             String line = in.nextLine();
             
-            if(line.equals("#showTree")){
-                showATree = !showATree;
-                System.out.println( showATree? "Showing parse tree." : "Hide parse tree.");
-                continue;
+
+            if (textBuilder.length() == 0) {
+                if (line.isBlank() || line.isEmpty())
+                    break;
+
+                else if (line.equals("#showTree")) {
+                    showATree = !showATree;
+                    System.out.println(showATree ? "Showing parse tree." : "Hide parse tree.");
+                    continue;
+                }
+
+                else if (line.equals("#exit")) {
+                    in.close();
+                    System.exit(0);
+                }
             }
 
-            if(line.equals("#exit")){
-                System.exit(0);
-            }
-            
-            Parser parser = new Parser(line);
-            SyntaxTree ast = parser.parse();
-            
+    
+
+            textBuilder.append(line+"\n");
+            String rawText = textBuilder.toString();
+
+            SyntaxTree ast = SyntaxTree.parse(rawText);
+
+            if(!line.isBlank() && !line.isEmpty() && !ast.getDiagnostics().isEmpty())
+                continue;
+
             Compilation compilation = new Compilation(ast);
             EvaluationResult result = compilation.evaluate(variables);
 
-            
             DiagnosticsBag diagnostics = result.getDiagnostics();
-            
-            if(showATree) ast.getRoot().prettyPrint("");
-            
-            
-            
+
+            if (showATree)
+                ast.getRoot().prettyPrint("", System.out);
+
             // if we find errors we display them else we evaluate
-            if(!diagnostics.isEmpty()){
+            if (!diagnostics.isEmpty()) {
                 Iterator<Diagnostic> itr = diagnostics.iterator();
-                while ( itr.hasNext()) {
+                SourceText text = ast.getText();
+                while (itr.hasNext()) {
                     Diagnostic diag = itr.next();
-                    System.out.println();
-                    System.out.println(ANSI_RED + diag.getMessage() + ANSI_RESET);
 
+                    int lineIndex = text.getLineIndex(diag.getSpan().getStart());
+                    TextLine errLine = ast.getText().getLines().get(lineIndex);
+                    int lineNumber = lineIndex + 1;
+                    int character = diag.getSpan().getStart() - text.getLines().get(lineIndex).getStart() + 1;
+
+
+                    TextSpan prefixSpan = TextSpan.fromBounds(errLine.getStart(), diag.getSpan().getStart());
+                    TextSpan suffixSpan = TextSpan.fromBounds(diag.getSpan().getEnd(), errLine.getEnd());
                     
-                    String prefix = line.substring(0,diag.getSpan().getStart());
-                    String error = line.substring(diag.getSpan().getStart(),diag.getSpan().getEnd());
-                    String suffix = line.substring(diag.getSpan().getEnd());
+                    
+                    System.out.println();
+                    System.out.print(ANSI_RED);
+                    System.out.print("[" + lineNumber + "," + character + "]: ");
+                    System.out.println(diag.getMessage() + ANSI_RESET);
 
-                    System.out.println("    " + prefix + ANSI_RED + error + ANSI_RESET+ suffix);
+                    String prefix = ast.getText().toString(prefixSpan);
+                    String error = ast.getText().toString(diag.getSpan());
+                    String suffix = ast.getText().toString(suffixSpan);
+
+                    System.out.println("    " + prefix + ANSI_RED + error + ANSI_RESET + suffix);
                     System.out.println();
 
                 }
-            } else{
+            } else {
                 System.out.println("" + result.getValue());
                 System.out.println();
             }
+
+            textBuilder = new StringBuilder();
         }
 
     }

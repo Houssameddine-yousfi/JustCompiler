@@ -1,5 +1,9 @@
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
 public class NameExpressionSyntax extends ExpressionSyntax {
 
     SyntaxToken identifierToken;
@@ -22,9 +26,17 @@ public class NameExpressionSyntax extends ExpressionSyntax {
 
 
     @Override
-    public void prettyPrint(String indentation) {
-        System.out.println( identifierToken.kind() + 
+    public void prettyPrint(String indentation, PrintStream printStream) {
+        printStream.println( identifierToken.kind() + 
                 " " + identifierToken.getValue());
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.identifierToken);
+        return list;
     }
 
     

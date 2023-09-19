@@ -5,6 +5,11 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  *
  * @author ajax
@@ -28,15 +33,13 @@ public class BinaryExpressionSyntax extends ExpressionSyntax{
     }
     
     @Override
-    public void prettyPrint(String indentation){
-        System.out.println( "BinaryExpression");
-        
-
-        System.out.print(indentation+"├──");
-        left.prettyPrint("│   " + indentation);
-        System.out.println(indentation+"├──" + operatorToken.kind());
-        System.out.print(indentation+"└──");
-        right.prettyPrint(indentation + "    " );   
+    public void prettyPrint(String indentation,PrintStream printStream){
+        printStream.println( "BinaryExpression");
+        printStream.print(indentation+"├──");
+        left.prettyPrint("│   " + indentation, printStream);
+        printStream.println(indentation+"├──" + operatorToken.kind());
+        printStream.print(indentation+"└──");
+        right.prettyPrint(indentation + "    " , printStream);   
     }
 
     public ExpressionSyntax getLeft() {
@@ -49,6 +52,16 @@ public class BinaryExpressionSyntax extends ExpressionSyntax{
 
     public SyntaxToken getOperatorToken() {
         return operatorToken;
+    }
+
+
+    @Override
+    public List<SyntaxNode> getChildren() {
+        List<SyntaxNode> list = new ArrayList<>();
+        list.add(this.left);
+        list.add(this.operatorToken);
+        list.add(this.right);
+        return list;
     }
     
     
