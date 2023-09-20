@@ -113,10 +113,10 @@ public class Parser {
         return new SyntaxToken(kind, current().getPosition(), null, null);
     }
     
-    public SyntaxTree parse(){
+    public CompilationUnitSyntax parseCompilationUnit(){
         ExpressionSyntax expressionSyntax = parseExpression();
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
-        return new SyntaxTree(this.text, this.diagnostics, expressionSyntax, endOfFile);
+        return new CompilationUnitSyntax(expressionSyntax, endOfFile);
     }
     
     private ExpressionSyntax parsePrimayExpression(){
@@ -159,6 +159,7 @@ public class Parser {
     public DiagnosticsBag getDiagnostics() {
         return diagnostics; 
     }
+
     
     
     

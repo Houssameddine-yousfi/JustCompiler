@@ -28,6 +28,7 @@ public class ParserTest {
 
         if (op1precedence >= op2precedence){
             AssertingList e = new AssertingList(ast.getRoot());
+            e.AssertNode(SyntaxKind.compilationUnit);
             e.AssertNode(SyntaxKind.binaryExpression);
             e.AssertNode(SyntaxKind.binaryExpression);
             e.AssertNode(SyntaxKind.nameExpression);
@@ -42,6 +43,7 @@ public class ParserTest {
 
         }else {
             AssertingList e = new AssertingList(ast.getRoot());
+            e.AssertNode(SyntaxKind.compilationUnit);
             e.AssertNode(SyntaxKind.binaryExpression);
             e.AssertNode(SyntaxKind.nameExpression);
             e.AssertToken(SyntaxKind.identifierToken, "a");
@@ -70,6 +72,7 @@ public class ParserTest {
 
         if (unaryPrecedence >= binaryPrecedence){
             AssertingList e = new AssertingList(ast.getRoot());
+            e.AssertNode(SyntaxKind.compilationUnit);
             e.AssertNode(SyntaxKind.binaryExpression);
             e.AssertNode(SyntaxKind.unaryExpression);
             e.AssertToken(unaryKind, unaryText);
@@ -83,7 +86,7 @@ public class ParserTest {
 
         }else {
             AssertingList e = new AssertingList(ast.getRoot());
-            
+            e.AssertNode(SyntaxKind.compilationUnit);
             e.AssertNode(SyntaxKind.unaryExpression);
             e.AssertToken(unaryKind, unaryText);
             e.AssertNode(SyntaxKind.binaryExpression);   

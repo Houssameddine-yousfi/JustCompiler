@@ -28,7 +28,7 @@ public enum SyntaxKind {
     bangEquals, 
     equalsEquals,
 
-    //keywords
+    // keywords
     trueKeyword,
     falseKeyword,
     identifierToken,
@@ -39,5 +39,8 @@ public enum SyntaxKind {
     literalExpression, 
     parenthesizedExpression, 
     nameExpression, 
-    assignmentExpression, 
+    assignmentExpression,
+
+    // Nodes
+    compilationUnit,
 }

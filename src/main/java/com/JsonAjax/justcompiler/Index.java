@@ -46,9 +46,9 @@ public class Index {
         while (true) {
 
             if (textBuilder.length() == 0)
-                System.out.print("Just> ");
+                System.out.print(ANSI_GREEN + "Just> " + ANSI_RESET);
             else
-                System.out.print("|     ");
+                System.out.print(ANSI_GREEN + "|     " + ANSI_RESET);
 
             String line = in.nextLine();
             
@@ -118,7 +118,7 @@ public class Index {
 
                 }
             } else {
-                System.out.println("" + result.getValue());
+                System.out.println(ANSI_PURPLE + result.getValue() + ANSI_RESET);
                 System.out.println();
             }
 

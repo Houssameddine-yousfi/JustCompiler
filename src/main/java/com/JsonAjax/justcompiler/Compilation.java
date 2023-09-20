@@ -21,7 +21,7 @@ public class Compilation {
         Binder binder = new Binder(variables);
         BoundExpression boundExpression;
         try {
-            boundExpression = binder.bindExpression(syntax.getRoot());
+            boundExpression = binder.bindExpression(syntax.getRoot().getExpression());
         } catch (Exception e) {
             e.printStackTrace();
             return new EvaluationResult(binder.getDiagnostics(),null);
