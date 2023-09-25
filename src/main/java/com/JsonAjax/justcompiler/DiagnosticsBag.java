@@ -1,7 +1,9 @@
 package com.JsonAjax.justcompiler;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
@@ -19,6 +21,10 @@ public class DiagnosticsBag implements Iterable {
         this.diagnostics.addAll(diagnostics.diagnostics);
     }
     
+
+    public List<Diagnostic> toList(){
+        return new ArrayList<>(this.diagnostics);
+    }
 
     @Override
     public Iterator iterator() {
@@ -58,10 +64,14 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportUndefinedName(TextSpan span, String name) {
-        String message = "Variable " + name + " doesn't exist";
+        String message = "Variable " + name + " doesn't exist.";
         report(span, message);
     }
 
+    public void reportVariableCannotConvert(TextSpan span, Class fromType, Class toType) {
+        String message = "Cannot convert type '" + fromType + "' to type '" + toType + "'";
+        report(span, message);
+    }
 
     
 }

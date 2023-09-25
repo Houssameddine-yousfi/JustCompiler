@@ -38,7 +38,7 @@ public class Index {
     public static void main(String[] args) throws Exception {
 
         Map<VariableSymbol, Object> variables = new HashMap<>();
-
+        Compilation previous = null;
         StringBuilder textBuilder = new StringBuilder();
         Scanner in = new Scanner(System.in);
 
@@ -67,6 +67,12 @@ public class Index {
                     in.close();
                     System.exit(0);
                 }
+
+                else if (line.equals("#reset")) {
+                    previous = null;
+                    System.out.println("Terminal has been reset! all variables has been droped.#\n");
+                    continue;
+                }
             }
 
     
@@ -79,7 +85,9 @@ public class Index {
             if(!line.isBlank() && !line.isEmpty() && !ast.getDiagnostics().isEmpty())
                 continue;
 
-            Compilation compilation = new Compilation(ast);
+            Compilation compilation = previous == null? 
+                new Compilation(ast):
+                previous.continueWith(ast);
             EvaluationResult result = compilation.evaluate(variables);
 
             DiagnosticsBag diagnostics = result.getDiagnostics();
@@ -120,6 +128,7 @@ public class Index {
             } else {
                 System.out.println(ANSI_PURPLE + result.getValue() + ANSI_RESET);
                 System.out.println();
+                previous = compilation;
             }
 
             textBuilder = new StringBuilder();

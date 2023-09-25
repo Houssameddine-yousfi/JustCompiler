@@ -1,12 +1,16 @@
 package com.JsonAjax.justcompiler.Binding;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Stack;
 
+import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.VariableSymbol;
 import com.JsonAjax.justcompiler.Syntax.AssignmentExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.CompilationUnitSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.NameExpressionSyntax;
@@ -18,11 +22,39 @@ import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
  */
 public class Binder {
 
-    Map<VariableSymbol, Object> variables;
     private DiagnosticsBag diagnostics = new DiagnosticsBag();
+    private BoundScope scope;
 
-    public Binder(Map<VariableSymbol, Object> variables){
-        this.variables = variables;
+    public Binder(BoundScope parentScope ){
+        this.scope = new BoundScope(parentScope);
+    }
+
+    private static BoundScope createParentScopes(BoundGlobalScope previous){
+        Stack<BoundGlobalScope> stack = new Stack<>();
+        while(previous != null){
+            stack.push(previous);
+            previous = previous.getPrevious();
+        }
+        BoundScope parent = null;
+
+        while(!stack.empty()){
+            previous = stack.pop();
+            BoundScope scope = new BoundScope(parent);
+            for (VariableSymbol variableSymbol : previous.getVariables())
+                scope.tryDeclare(variableSymbol);
+            parent = scope;
+        }
+
+        return parent;
+    }
+
+    public static BoundGlobalScope bindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax) throws Exception{
+        BoundScope parentScope = createParentScopes(previous);
+        Binder binder = new Binder(parentScope);
+        BoundExpression expression = binder.bindExpression(syntax.getExpression());
+        List<VariableSymbol> variables = binder.scope.getDeclaredVariables();
+        DiagnosticsBag diagnostics = binder.getDiagnostics();
+        return new BoundGlobalScope(previous, diagnostics, variables, expression);
     }
 
     public BoundExpression bindExpression(ExpressionSyntax syntax) throws Exception {
@@ -46,36 +78,40 @@ public class Binder {
         }
     }
 
-    private BoundExpression bindAssignmentExpression(AssignmentExpressionSyntax syntax) throws Exception {
-        String name = syntax.getIdentifierToken().getText();
-        BoundExpression boundExpression = bindExpression(syntax.getExpression());
-
-
-        Optional<VariableSymbol> existingvariable = variables.keySet().stream()
-            .filter(v -> name.equals(v.getName()))
-            .findFirst();
-        if(existingvariable.isPresent())
-            variables.remove(existingvariable.get());
-        
-        VariableSymbol variable = new VariableSymbol(name, boundExpression.getType());
-        variables.put(variable, null);
-
-        return new BoundAssignmentExpression(variable, boundExpression);
-    }
+    
 
     private BoundExpression bindNameExpression(NameExpressionSyntax syntax) {
         String name = syntax.getIdentifierToken().getText();
-
-        Optional<VariableSymbol> variable = variables.keySet().stream()
-        .filter(v -> name.equals(v.getName()))
-        .findFirst();
-
-        if(variable.isEmpty()){
+        Optional<VariableSymbol> optioinalVariable = scope.tryLookup(name);
+        if(optioinalVariable.isEmpty()){
             diagnostics.reportUndefinedName(syntax.getIdentifierToken().getSpan(), name);
             return new BoundLiteralExpression(0);
         }
         
-        return new BoundVariableExpression(variable.get());
+        return new BoundVariableExpression(optioinalVariable.get());
+    }
+
+
+    private BoundExpression bindAssignmentExpression(AssignmentExpressionSyntax syntax) throws Exception {
+        
+        String name = syntax.getIdentifierToken().getText();
+        BoundExpression boundExpression = bindExpression(syntax.getExpression());
+    
+        VariableSymbol variable;
+        Optional<VariableSymbol> optionalVar = scope.tryLookup(name);
+        if(optionalVar.isEmpty()){
+            variable = new VariableSymbol(name, boundExpression.getType());
+            scope.tryDeclare(variable);
+        }else{
+            variable = optionalVar.orElseThrow();
+        }
+
+        if(boundExpression.getType() != variable.getType()){
+            diagnostics.reportVariableCannotConvert(syntax.getExpression().getSpan(), boundExpression.getType(), variable.getType());
+            return boundExpression;
+        }
+
+        return new BoundAssignmentExpression(variable, boundExpression);
     }
 
     private BoundExpression bindLiteralExpression(LiteralExpressionSyntax syntax) throws Exception{
