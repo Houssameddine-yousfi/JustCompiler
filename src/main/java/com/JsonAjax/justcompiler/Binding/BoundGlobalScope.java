@@ -10,14 +10,14 @@ public class BoundGlobalScope {
     
     private DiagnosticsBag diagnostics;
     private List<VariableSymbol> variables;
-    private BoundExpression expression;
+    private BoundStatement statement;
     private BoundGlobalScope previous;
     
     
-    public BoundGlobalScope(BoundGlobalScope previous, DiagnosticsBag diagnostics, List<VariableSymbol> variables, BoundExpression expression) {
+    public BoundGlobalScope(BoundGlobalScope previous, DiagnosticsBag diagnostics, List<VariableSymbol> variables, BoundStatement statement) {
         this.diagnostics = diagnostics;
         this.variables = variables;
-        this.expression = expression;
+        this.statement = statement;
         this.previous = previous;
     }
 
@@ -32,8 +32,8 @@ public class BoundGlobalScope {
     }
 
 
-    public BoundExpression getExpression() {
-        return expression;
+    public BoundStatement getStatement() {
+        return statement;
     }
 
 

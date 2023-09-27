@@ -5,18 +5,18 @@ import java.util.List;
 
 public class CompilationUnitSyntax extends SyntaxNode {
 
-    private ExpressionSyntax expression;
+    private StatementSyntax statement;
     private SyntaxToken endOfFileToken;
 
     
 
-    public CompilationUnitSyntax(ExpressionSyntax expression, SyntaxToken endOfFileToken) {
-        this.expression = expression;
+    public CompilationUnitSyntax(StatementSyntax statement, SyntaxToken endOfFileToken) {
+        this.statement = statement;
         this.endOfFileToken = endOfFileToken;
     }
 
-    public ExpressionSyntax getExpression() {
-        return expression;
+    public StatementSyntax getStatement() {
+        return statement;
     }
 
     public SyntaxToken getEndOfFileToken() {
@@ -33,12 +33,12 @@ public class CompilationUnitSyntax extends SyntaxNode {
         printStream.println( "CompilationUnit");
         
         printStream.print(indentation+"└──");
-        expression.prettyPrint(indentation + "    ", printStream);
+        statement.prettyPrint(indentation + "    ", printStream);
     }
 
     @Override
     public List<SyntaxNode> getChildren() {
-        return List.of(expression);
+        return List.of(statement);
     }
     
 }

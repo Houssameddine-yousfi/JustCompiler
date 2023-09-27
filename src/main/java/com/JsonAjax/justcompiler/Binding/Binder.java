@@ -1,5 +1,6 @@
 package com.JsonAjax.justcompiler.Binding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,11 +11,15 @@ import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.VariableSymbol;
 import com.JsonAjax.justcompiler.Syntax.AssignmentExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.BinaryExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.BlockStatmentSyntax;
 import com.JsonAjax.justcompiler.Syntax.CompilationUnitSyntax;
+import com.JsonAjax.justcompiler.Syntax.ExpressionStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.NameExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.StatementSyntax;
+import com.JsonAjax.justcompiler.Syntax.SyntaxNode;
 import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
 
 /**
@@ -51,13 +56,40 @@ public class Binder {
     public static BoundGlobalScope bindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax) throws Exception{
         BoundScope parentScope = createParentScopes(previous);
         Binder binder = new Binder(parentScope);
-        BoundExpression expression = binder.bindExpression(syntax.getExpression());
+        BoundStatement statement = binder.bindStatement(syntax.getStatement());
         List<VariableSymbol> variables = binder.scope.getDeclaredVariables();
         DiagnosticsBag diagnostics = binder.getDiagnostics();
-        return new BoundGlobalScope(previous, diagnostics, variables, expression);
+        return new BoundGlobalScope(previous, diagnostics, variables, statement);
     }
 
-    public BoundExpression bindExpression(ExpressionSyntax syntax) throws Exception {
+    private BoundStatement bindStatement(StatementSyntax syntax) throws Exception {
+
+        switch(syntax.kind()){
+            case blockStatment:
+                return bindBlockStatement((BlockStatmentSyntax) syntax);
+            case expressionStatment:
+                return bindExpressionStatement((ExpressionStatementSyntax) syntax);
+            
+            default:
+                throw new Exception("Unexpected syntax " + syntax.kind());
+        }
+    }
+
+    private BoundStatement bindBlockStatement(BlockStatmentSyntax syntax) throws Exception {
+        List<BoundStatement> statements = new ArrayList<>();
+        for (StatementSyntax statementSyntax : syntax.getStatements()) {
+            BoundStatement statement = bindStatement(statementSyntax);
+            statements.add(statement);
+        }
+        return new BoundBlockStatement(statements);
+    }
+
+    private BoundStatement bindExpressionStatement(ExpressionStatementSyntax syntax) throws Exception{
+        BoundExpression expression = bindExpression(syntax.getExpression());
+        return new BoundExpressionStatement(expression);
+    }
+
+    private BoundExpression bindExpression(ExpressionSyntax syntax) throws Exception {
 
         switch(syntax.kind()){
             case parenthesizedExpression:
@@ -110,6 +142,7 @@ public class Binder {
             diagnostics.reportVariableCannotConvert(syntax.getExpression().getSpan(), boundExpression.getType(), variable.getType());
             return boundExpression;
         }
+        
 
         return new BoundAssignmentExpression(variable, boundExpression);
     }

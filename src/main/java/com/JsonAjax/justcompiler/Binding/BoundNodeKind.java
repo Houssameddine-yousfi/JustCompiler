@@ -1,6 +1,12 @@
 package com.JsonAjax.justcompiler.Binding;
 
 public enum BoundNodeKind {
-    UnaryExpression, LiteralExpression, BinaryExpression, VariableExpression, AssignmentExpression
+    
+    //statments
+    blockStatment,
+    expressionStatement, 
+
+    //expressions
+    UnaryExpression, LiteralExpression, BinaryExpression, VariableExpression, AssignmentExpression, 
     
 }

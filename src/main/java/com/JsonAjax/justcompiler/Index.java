@@ -70,7 +70,7 @@ public class Index {
 
                 else if (line.equals("#reset")) {
                     previous = null;
-                    System.out.println("Terminal has been reset! all variables has been droped.#\n");
+                    System.out.println("Terminal has been reset! all variables has been droped.\n");
                     continue;
                 }
             }

@@ -85,6 +85,10 @@ public class SyntaxFacts {
                 return "(";
             case rightParen:
                 return ")";
+            case leftBrace:
+                return "{";
+            case rightBrace:
+                return "}";
             case bang:
                 return "!";
             case equals:

@@ -61,6 +61,33 @@ public class Parser {
         return parseAssignmentExpression();
     }
 
+    private StatementSyntax parseStatement(){
+        if (current().kind() == SyntaxKind.leftBrace)
+            return parseBlockStatement();
+        
+        return parseExpressionStatment();
+
+    }
+    
+    private StatementSyntax parseBlockStatement(){
+        List<StatementSyntax> statements = new ArrayList<>();
+        SyntaxToken leftBraceToken = matchToken(SyntaxKind.leftBrace);
+
+        while(current().kind() != SyntaxKind.endOfFile 
+            && current().kind() != SyntaxKind.rightBrace){
+                StatementSyntax statement = parseStatement();
+                statements.add(statement);
+        }
+
+        SyntaxToken rightBraceToken = matchToken(SyntaxKind.rightBrace);
+        return new BlockStatmentSyntax(leftBraceToken, statements, rightBraceToken);
+    }
+    
+    private StatementSyntax parseExpressionStatment(){
+        ExpressionSyntax expression = parseExpression();
+        return new ExpressionStatementSyntax(expression);
+    }
+
     private ExpressionSyntax parseAssignmentExpression(){
         if (peek(0).kind() == SyntaxKind.identifierToken &&
             peek(1).kind() == SyntaxKind.equals){
@@ -114,9 +141,9 @@ public class Parser {
     }
     
     public CompilationUnitSyntax parseCompilationUnit(){
-        ExpressionSyntax expressionSyntax = parseExpression();
+        StatementSyntax statementSyntax = parseStatement();
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
-        return new CompilationUnitSyntax(expressionSyntax, endOfFile);
+        return new CompilationUnitSyntax(statementSyntax, endOfFile);
     }
     
     private ExpressionSyntax parsePrimayExpression(){
