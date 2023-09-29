@@ -81,6 +81,14 @@ public class Lexer {
                 this.kind = SyntaxKind.rightParen;
                 this.position++;
                 break;
+            case '{':
+                this.kind = SyntaxKind.leftBrace;
+                this.position++;
+                break;
+            case '}':
+                this.kind = SyntaxKind.rightBrace;
+                this.position++;
+                break;
 
             case '!':
                 if (lookahead() == '=') {

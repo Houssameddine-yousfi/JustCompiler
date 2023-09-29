@@ -63,7 +63,7 @@ public final class SourceText {
             }
         }
 
-        if(position>lineStart){
+        if(position>=lineStart){
             addLine(lines, sourceText, lineStart, position, 0);
         }
 

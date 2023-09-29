@@ -61,6 +61,50 @@ public class Parser {
         return parseAssignmentExpression();
     }
 
+    private StatementSyntax parseStatement(){
+
+        switch(current().kind()){
+            case leftBrace:
+                return parseBlockStatement();
+            case letKeyword:
+            case varKeyword:
+                return parseVariableDeclaration();
+            default:
+                return parseExpressionStatment();
+        }
+        
+        
+
+    }
+
+    private StatementSyntax parseBlockStatement(){
+        List<StatementSyntax> statements = new ArrayList<>();
+        SyntaxToken leftBraceToken = matchToken(SyntaxKind.leftBrace);
+
+        while(current().kind() != SyntaxKind.endOfFile 
+            && current().kind() != SyntaxKind.rightBrace){
+                StatementSyntax statement = parseStatement();
+                statements.add(statement);
+        }
+
+        SyntaxToken rightBraceToken = matchToken(SyntaxKind.rightBrace);
+        return new BlockStatmentSyntax(leftBraceToken, statements, rightBraceToken);
+    }
+
+    private StatementSyntax parseVariableDeclaration() {
+        SyntaxKind expected = current().kind() == SyntaxKind.letKeyword? SyntaxKind.letKeyword: SyntaxKind.varKeyword;
+        SyntaxToken keyword = matchToken(expected);
+        SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
+        SyntaxToken equals = matchToken(SyntaxKind.equals);
+        ExpressionSyntax initializer = parseExpression();
+        return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
+    }
+    
+    private StatementSyntax parseExpressionStatment(){
+        ExpressionSyntax expression = parseExpression();
+        return new ExpressionStatementSyntax(expression);
+    }
+
     private ExpressionSyntax parseAssignmentExpression(){
         if (peek(0).kind() == SyntaxKind.identifierToken &&
             peek(1).kind() == SyntaxKind.equals){
@@ -113,10 +157,10 @@ public class Parser {
         return new SyntaxToken(kind, current().getPosition(), null, null);
     }
     
-    public SyntaxTree parse(){
-        ExpressionSyntax expressionSyntax = parseExpression();
+    public CompilationUnitSyntax parseCompilationUnit(){
+        StatementSyntax statementSyntax = parseStatement();
         SyntaxToken endOfFile = matchToken(SyntaxKind.endOfFile);
-        return new SyntaxTree(this.text, this.diagnostics, expressionSyntax, endOfFile);
+        return new CompilationUnitSyntax(statementSyntax, endOfFile);
     }
     
     private ExpressionSyntax parsePrimayExpression(){
@@ -159,6 +203,7 @@ public class Parser {
     public DiagnosticsBag getDiagnostics() {
         return diagnostics; 
     }
+
     
     
     

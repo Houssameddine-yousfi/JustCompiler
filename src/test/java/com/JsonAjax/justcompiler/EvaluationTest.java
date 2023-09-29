@@ -58,7 +58,7 @@ public class EvaluationTest {
             Arguments.of("true || true", true),
             Arguments.of("true || false", true),
             
-            Arguments.of("(a = 10) * a", 100)
+            Arguments.of("{var a = 0 (a = 10) * a}", 100)
         );
         
         return list.stream();

@@ -16,18 +16,20 @@ import com.JsonAjax.justcompiler.Text.SourceText;
 public class SyntaxTree {
 
     private SourceText text;
-    private ExpressionSyntax root;
+    private CompilationUnitSyntax root;
     private SyntaxToken endOfFile;
     private DiagnosticsBag diagnostics;
 
-    public SyntaxTree(SourceText text, DiagnosticsBag diagnostics, ExpressionSyntax root, SyntaxToken endOfFile) {
+    private SyntaxTree(SourceText text) {
+        Parser parser = new Parser(text);
+        CompilationUnitSyntax root  =  parser.parseCompilationUnit();
+        diagnostics = parser.getDiagnostics();
+        
         this.root = root;
-        this.endOfFile = endOfFile;
-        this.diagnostics = diagnostics;
         this.text = text;
     }
 
-    public ExpressionSyntax getRoot() {
+    public CompilationUnitSyntax getRoot() {
         return root;
     }
 
@@ -40,15 +42,13 @@ public class SyntaxTree {
     }
 
     public static SyntaxTree parse(SourceText text){
-        Parser parser = new Parser(text);
-        return parser.parse();
+        return new SyntaxTree(text);
     }
     
 
     public static SyntaxTree parse(String text){
         SourceText sourceText = SourceText.from(text);
-        Parser parser = new Parser(sourceText);
-        return parser.parse();
+        return new SyntaxTree(sourceText);
     }
     
     public static List<SyntaxToken> parseTokens(SourceText text){

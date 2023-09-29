@@ -48,6 +48,10 @@ public class SyntaxFacts {
                 return SyntaxKind.trueKeyword;
             case "false":
                 return SyntaxKind.falseKeyword;
+            case "let":
+                return SyntaxKind.letKeyword;
+            case "var":
+                return SyntaxKind.varKeyword;
             default:
                 return SyntaxKind.identifierToken;
         }
@@ -85,6 +89,10 @@ public class SyntaxFacts {
                 return "(";
             case rightParen:
                 return ")";
+            case leftBrace:
+                return "{";
+            case rightBrace:
+                return "}";
             case bang:
                 return "!";
             case equals:
@@ -101,6 +109,10 @@ public class SyntaxFacts {
                 return "false";
             case trueKeyword:
                 return "true";
+            case letKeyword:
+                return "let";
+            case varKeyword:
+                return "var";
             default:
                 return null;
         }
