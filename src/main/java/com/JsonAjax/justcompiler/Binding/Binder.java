@@ -19,8 +19,10 @@ import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.NameExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.StatementSyntax;
+import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
 import com.JsonAjax.justcompiler.Syntax.SyntaxNode;
 import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.VariableDeclarationSyntax;
 
 /**
  * Binder is a type checker. It walks the syntacs tree and create the bound tree
@@ -69,19 +71,40 @@ public class Binder {
                 return bindBlockStatement((BlockStatmentSyntax) syntax);
             case expressionStatment:
                 return bindExpressionStatement((ExpressionStatementSyntax) syntax);
+            case variableDeclaration:
+                return bindVariableDeclaration((VariableDeclarationSyntax) syntax);
             
             default:
                 throw new Exception("Unexpected syntax " + syntax.kind());
         }
     }
 
+ 
+
     private BoundStatement bindBlockStatement(BlockStatmentSyntax syntax) throws Exception {
         List<BoundStatement> statements = new ArrayList<>();
+        scope = new BoundScope(scope);
+
         for (StatementSyntax statementSyntax : syntax.getStatements()) {
             BoundStatement statement = bindStatement(statementSyntax);
             statements.add(statement);
         }
+
+        scope = scope.getParent();
         return new BoundBlockStatement(statements);
+    }
+
+    
+    private BoundStatement bindVariableDeclaration(VariableDeclarationSyntax syntax) throws Exception {
+        String name = syntax.getIdentifier().getText();
+        boolean isReadOnly = syntax.getKeyword().kind() == SyntaxKind.letKeyword;
+        BoundExpression intializer = bindExpression(syntax.getInitializer());
+        VariableSymbol variable = new VariableSymbol(name, isReadOnly, intializer.getType());
+        if (!scope.tryDeclare(variable)){
+            diagnostics.reportVariableAlreadyDeclared(syntax.getIdentifier().getSpan(), name);
+            variable = scope.tryLookup(name).orElseThrow();
+        }
+        return new BoundVariableDeclaration(variable, intializer);
     }
 
     private BoundStatement bindExpressionStatement(ExpressionStatementSyntax syntax) throws Exception{
@@ -132,10 +155,14 @@ public class Binder {
         VariableSymbol variable;
         Optional<VariableSymbol> optionalVar = scope.tryLookup(name);
         if(optionalVar.isEmpty()){
-            variable = new VariableSymbol(name, boundExpression.getType());
-            scope.tryDeclare(variable);
+            diagnostics.reportUndefinedName(syntax.getIdentifierToken().getSpan(), name);
+            return boundExpression;
         }else{
             variable = optionalVar.orElseThrow();
+        }
+
+        if(variable.isReadOnly()){
+            diagnostics.reportCannotAssign(syntax.getEqualsToken().getSpan(), name);
         }
 
         if(boundExpression.getType() != variable.getType()){

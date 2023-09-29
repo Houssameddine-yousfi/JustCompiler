@@ -28,16 +28,20 @@ public enum SyntaxKind {
     bangEquals, 
     equalsEquals,
     leftBrace, 
-    rightBrace, 
+    rightBrace,
+    identifierToken,
 
     // keywords
     trueKeyword,
     falseKeyword,
-    identifierToken,
+    letKeyword, 
+    varKeyword,
 
+    
     // Statments
     blockStatment,
-    expressionStatment, 
+    expressionStatment,
+    variableDeclaration, 
     
     // Expressions
     binaryExpression,
@@ -48,5 +52,5 @@ public enum SyntaxKind {
     assignmentExpression,
 
     // Nodes
-    compilationUnit, 
+    compilationUnit,   
 }

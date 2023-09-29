@@ -62,13 +62,21 @@ public class Parser {
     }
 
     private StatementSyntax parseStatement(){
-        if (current().kind() == SyntaxKind.leftBrace)
-            return parseBlockStatement();
+
+        switch(current().kind()){
+            case leftBrace:
+                return parseBlockStatement();
+            case letKeyword:
+            case varKeyword:
+                return parseVariableDeclaration();
+            default:
+                return parseExpressionStatment();
+        }
         
-        return parseExpressionStatment();
+        
 
     }
-    
+
     private StatementSyntax parseBlockStatement(){
         List<StatementSyntax> statements = new ArrayList<>();
         SyntaxToken leftBraceToken = matchToken(SyntaxKind.leftBrace);
@@ -81,6 +89,15 @@ public class Parser {
 
         SyntaxToken rightBraceToken = matchToken(SyntaxKind.rightBrace);
         return new BlockStatmentSyntax(leftBraceToken, statements, rightBraceToken);
+    }
+
+    private StatementSyntax parseVariableDeclaration() {
+        SyntaxKind expected = current().kind() == SyntaxKind.letKeyword? SyntaxKind.letKeyword: SyntaxKind.varKeyword;
+        SyntaxToken keyword = matchToken(expected);
+        SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
+        SyntaxToken equals = matchToken(SyntaxKind.equals);
+        ExpressionSyntax initializer = parseExpression();
+        return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
     }
     
     private StatementSyntax parseExpressionStatment(){

@@ -47,7 +47,7 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportUndefindUnaryOperator(TextSpan span, String operatorText, Class operandType) {
-        String message = "Unary operator " + operatorText + " is not defined for type " + operandType;
+        String message = "Unary operator " + operatorText + " is not defined for type " + operandType +".";
         report(span, message);
     }
 
@@ -55,7 +55,7 @@ public class DiagnosticsBag implements Iterable {
         String message = "Binary operator " + operatorText
         + " is not defined for types " 
         + typeLeft + " and "
-        + typeRight;
+        + typeRight + ".";
         report(span, message);
     }
 
@@ -69,7 +69,17 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportVariableCannotConvert(TextSpan span, Class fromType, Class toType) {
-        String message = "Cannot convert type '" + fromType + "' to type '" + toType + "'";
+        String message = "Cannot convert type '" + fromType + "' to type '" + toType + "'.";
+        report(span, message);
+    }
+
+    public void reportVariableAlreadyDeclared(TextSpan span, String name) {
+        String message = "Variable '" + name + "' is already declared.'";
+        report(span, message);
+    }
+
+    public void reportCannotAssign(TextSpan span, String name) {
+        String message = "Variable '" + name + "' is read-only and cannotbe assigned to.";
         report(span, message);
     }
 

@@ -16,6 +16,7 @@ import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
 import com.JsonAjax.justcompiler.Binding.BoundStatement;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryOperatorKind;
+import com.JsonAjax.justcompiler.Binding.BoundVariableDeclaration;
 import com.JsonAjax.justcompiler.Binding.BoundVariableExpression;
 /**
  *
@@ -47,10 +48,19 @@ public class Evaluator {
             case expressionStatement:
                 evaluateExpressionStatement((BoundExpressionStatement)node);
                 break;
+            case BoundVariableDeclaration:
+                evaluateVariableDeclaration((BoundVariableDeclaration)node);
+                break;
             
             default:
                 throw new AssertionError("Unexpected Node " + node);
         }
+    }
+
+    private void evaluateVariableDeclaration(BoundVariableDeclaration node) {
+        Object value = evaluateExpression(node.getInitialiser());
+        variables.put(node.getVariable(), value);
+        lastValue = value;
     }
 
     private void evaluateBlockStatement(BoundBlockStatement node) {
