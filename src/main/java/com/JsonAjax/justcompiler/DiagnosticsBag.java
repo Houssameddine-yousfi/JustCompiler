@@ -31,6 +31,11 @@ public class DiagnosticsBag implements Iterable {
        return this.diagnostics.iterator();
     }
 
+
+    public int size(){
+        return diagnostics.size();
+    }
+
     public void reportInvalidNumber(TextSpan textSpan, String text, Class type) {
         String message = "The number " + text + " isn't a valid {"+ type +"}.";
         report(textSpan, message);
@@ -47,15 +52,15 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportUndefindUnaryOperator(TextSpan span, String operatorText, Class operandType) {
-        String message = "Unary operator " + operatorText + " is not defined for type " + operandType +".";
+        String message = "Unary operator " + operatorText + " is not defined for type '" + operandType +"'.";
         report(span, message);
     }
 
     public void reportUndefindBinaryOperator(TextSpan span, String operatorText, Class typeLeft, Class typeRight) {
-        String message = "Binary operator " + operatorText
-        + " is not defined for types " 
-        + typeLeft + " and "
-        + typeRight + ".";
+        String message = "Binary operator '" + operatorText
+        + "' is not defined for types '" 
+        + typeLeft + "' and '"
+        + typeRight + "'.";
         report(span, message);
     }
 
@@ -64,7 +69,7 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportUndefinedName(TextSpan span, String name) {
-        String message = "Variable " + name + " doesn't exist.";
+        String message = "Variable '" + name + "' doesn't exist.";
         report(span, message);
     }
 
@@ -74,12 +79,12 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportVariableAlreadyDeclared(TextSpan span, String name) {
-        String message = "Variable '" + name + "' is already declared.'";
+        String message = "Variable '" + name + "' is already declared.";
         report(span, message);
     }
 
     public void reportCannotAssign(TextSpan span, String name) {
-        String message = "Variable '" + name + "' is read-only and cannotbe assigned to.";
+        String message = "Variable '" + name + "' is read-only and cannot be assigned to.";
         report(span, message);
     }
 
