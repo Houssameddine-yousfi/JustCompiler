@@ -70,8 +70,8 @@ For now this is just an expression evaluator not a compiler. It support only two
 ## Setup
 
 ### Requirements 
-- Java JDK 11 
-- Maven 3.6
+- Java JDK 17+ 
+- Maven 3.6+
 
 ### Run
 ```bash
