@@ -1,4 +1,4 @@
-package com.JsonAjax.justcompiler.Syntax.TestUtils;
+package com.JsonAjax.justcompiler.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
