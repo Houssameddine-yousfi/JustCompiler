@@ -89,7 +89,6 @@ public class Lexer {
                 this.kind = SyntaxKind.rightBrace;
                 this.position++;
                 break;
-
             case '!':
                 if (lookahead() == '=') {
                     this.position += 2;
@@ -120,7 +119,24 @@ public class Lexer {
                     this.position++;
                 }
                 break;
-
+            case '<':
+                if (lookahead() == '=') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.lessOrEquals;
+                } else {
+                    this.kind = SyntaxKind.less;
+                    this.position++;
+                }
+                break;
+            case '>':
+                if (lookahead() == '=') {
+                    this.position += 2;
+                    this.kind = SyntaxKind.greaterOrEquals;
+                } else {
+                    this.kind = SyntaxKind.greater;
+                    this.position++;
+                }
+                break;
             // use cases for digits instead of Charachter.idDegit() for better performance
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':

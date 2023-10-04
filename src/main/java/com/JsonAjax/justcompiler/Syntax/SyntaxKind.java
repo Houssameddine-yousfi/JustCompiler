@@ -27,9 +27,14 @@ public enum SyntaxKind {
     pipePipe,
     bangEquals, 
     equalsEquals,
+    lessOrEquals, 
+    less, 
+    greaterOrEquals, 
+    greater,
     leftBrace, 
     rightBrace,
     identifierToken,
+
 
     // keywords
     trueKeyword,
@@ -52,5 +57,5 @@ public enum SyntaxKind {
     assignmentExpression,
 
     // Nodes
-    compilationUnit,   
+    compilationUnit,    
 }

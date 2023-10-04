@@ -17,6 +17,10 @@ public class SyntaxFacts {
 
             case equalsEquals:
             case bangEquals:
+            case less:
+            case lessOrEquals:
+            case greater:
+            case greaterOrEquals:
                 return 3;
 
             case ampersandAmpersand:
@@ -105,6 +109,14 @@ public class SyntaxFacts {
                 return  "!=";
             case equalsEquals:
                 return "==";
+            case less:
+                return "<";
+            case lessOrEquals:
+                return "<=";
+            case greater:
+                return ">";
+            case greaterOrEquals:
+                return ">=";
             case falseKeyword:
                 return "false";
             case trueKeyword:

@@ -52,10 +52,24 @@ public class EvaluationTest {
             Arguments.of("2 == 3", false),
             Arguments.of("2 != 2", false),
             Arguments.of("2 != 3", true),
-             Arguments.of("false == false", true),
+            Arguments.of("false == false", true),
             Arguments.of("true == false", false),
             Arguments.of("true != true", false),
             Arguments.of("true != false", true),
+
+            Arguments.of("3 < 4", true),
+            Arguments.of("3 < 2", false),
+
+            Arguments.of("3 <= 4", true),
+            Arguments.of("3 <= 3", true),
+            Arguments.of("3 <= 2", false),
+
+            Arguments.of("3 > 2", true),
+            Arguments.of("3 > 4", false),
+
+            Arguments.of("3 >= 2", true),
+            Arguments.of("3 >= 3", true),
+            Arguments.of("3 >= 4", false),
 
             Arguments.of("true", true),
             Arguments.of("false", false),

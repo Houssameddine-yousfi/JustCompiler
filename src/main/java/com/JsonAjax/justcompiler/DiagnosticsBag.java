@@ -52,7 +52,7 @@ public class DiagnosticsBag implements Iterable {
     }
 
     public void reportUndefindUnaryOperator(TextSpan span, String operatorText, Class operandType) {
-        String message = "Unary operator " + operatorText + " is not defined for type '" + operandType +"'.";
+        String message = "Unary operator '" + operatorText + "' is not defined for type '" + operandType +"'.";
         report(span, message);
     }
 

@@ -29,6 +29,12 @@ public class LexerTest {
             Arguments.of(SyntaxKind.pipePipe, "||"),
             Arguments.of(SyntaxKind.bangEquals,  "!="),
             Arguments.of(SyntaxKind.equalsEquals, "=="),
+
+            Arguments.of(SyntaxKind.less, "<"),
+            Arguments.of(SyntaxKind.lessOrEquals, "<="),
+            Arguments.of(SyntaxKind.greater, ">"),
+            Arguments.of(SyntaxKind.greaterOrEquals, ">="),
+
             Arguments.of(SyntaxKind.falseKeyword, "false"),
             Arguments.of(SyntaxKind.trueKeyword, "true"),
             
@@ -112,6 +118,18 @@ public class LexerTest {
             return true;
 
 
+
+        if(kind1 == SyntaxKind.less && kind2 == SyntaxKind.equals)
+            return true;
+        if(kind1 == SyntaxKind.less && kind2 == SyntaxKind.equalsEquals)
+            return true;
+        if(kind1 == SyntaxKind.greater && kind2 == SyntaxKind.equals)
+            return true;
+        if(kind1 == SyntaxKind.greater && kind2 == SyntaxKind.equalsEquals)
+            return true;
+        
+            
+        
         return false;
     }
 
