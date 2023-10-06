@@ -12,6 +12,7 @@ import com.JsonAjax.justcompiler.Binding.BoundBinaryOperatorKind;
 import com.JsonAjax.justcompiler.Binding.BoundBlockStatement;
 import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundExpressionStatement;
+import com.JsonAjax.justcompiler.Binding.BoundIfStatment;
 import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
 import com.JsonAjax.justcompiler.Binding.BoundStatement;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
@@ -48,14 +49,19 @@ public class Evaluator {
             case expressionStatement:
                 evaluateExpressionStatement((BoundExpressionStatement)node);
                 break;
-            case BoundVariableDeclaration:
+            case boundVariableDeclaration:
                 evaluateVariableDeclaration((BoundVariableDeclaration)node);
+                break;
+            case ifStatement:
+                evaluateIfStatement((BoundIfStatment) node);
                 break;
             
             default:
                 throw new AssertionError("Unexpected Node " + node);
         }
     }
+
+
 
     private void evaluateVariableDeclaration(BoundVariableDeclaration node) {
         Object value = evaluateExpression(node.getInitialiser());
@@ -71,6 +77,14 @@ public class Evaluator {
 
     private void evaluateExpressionStatement(BoundExpressionStatement node) {
         lastValue = evaluateExpression(node.getExpression());
+    }
+
+    private void evaluateIfStatement(BoundIfStatment node) {
+        Boolean condition = (Boolean) evaluateExpression(node.getCondition());
+        if(condition)
+            evaluateStatement(node.getThanStatement());
+        else if(node.getElseStatement() != null)
+            evaluateStatement(node.getElseStatement());
     }
 
     private Object evaluateExpression(BoundExpression node) {

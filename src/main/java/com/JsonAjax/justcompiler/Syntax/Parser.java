@@ -69,6 +69,8 @@ public class Parser {
             case letKeyword:
             case varKeyword:
                 return parseVariableDeclaration();
+            case ifKeyword:
+                return parseIfStatment();
             default:
                 return parseExpressionStatment();
         }
@@ -177,6 +179,8 @@ public class Parser {
         }
     }
 
+ 
+
     private ExpressionSyntax parseNumberLiteral() {
         SyntaxToken numberToken = matchToken(SyntaxKind.number);
         return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
@@ -198,6 +202,24 @@ public class Parser {
     private ExpressionSyntax parseNameExpression() {
         SyntaxToken identifierToken = matchToken(SyntaxKind.identifierToken);
         return new NameExpressionSyntax(identifierToken);
+    }
+
+    private IfStatementSyntax parseIfStatment() {
+        SyntaxToken keyword = matchToken(SyntaxKind.ifKeyword);
+        ExpressionSyntax condition  = parseExpression();
+        StatementSyntax statment = parseStatement();
+        ElseClauseSyntax elseClause = parseElseClause();
+
+        return new IfStatementSyntax(keyword, condition, statment, elseClause);
+    }
+
+    private ElseClauseSyntax parseElseClause() {
+        if(current().kind() != SyntaxKind.elseKeyword)
+            return null;
+        
+        SyntaxToken elseKeyword = matchToken(SyntaxKind.elseKeyword);
+        StatementSyntax elseStatement = parseStatement();
+        return new ElseClauseSyntax(elseKeyword, elseStatement);
     }
 
     public DiagnosticsBag getDiagnostics() {

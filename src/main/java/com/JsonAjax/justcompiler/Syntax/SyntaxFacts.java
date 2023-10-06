@@ -52,6 +52,10 @@ public class SyntaxFacts {
                 return SyntaxKind.trueKeyword;
             case "false":
                 return SyntaxKind.falseKeyword;
+            case "if":
+                return SyntaxKind.ifKeyword;
+            case "else":
+                return SyntaxKind.elseKeyword;
             case "let":
                 return SyntaxKind.letKeyword;
             case "var":
@@ -125,6 +129,10 @@ public class SyntaxFacts {
                 return "let";
             case varKeyword:
                 return "var";
+            case ifKeyword:
+                return "if";
+            case elseKeyword:
+                return "else";
             default:
                 return null;
         }

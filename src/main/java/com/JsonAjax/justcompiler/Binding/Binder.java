@@ -15,6 +15,7 @@ import com.JsonAjax.justcompiler.Syntax.BlockStatmentSyntax;
 import com.JsonAjax.justcompiler.Syntax.CompilationUnitSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.IfStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.NameExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
@@ -73,13 +74,13 @@ public class Binder {
                 return bindExpressionStatement((ExpressionStatementSyntax) syntax);
             case variableDeclaration:
                 return bindVariableDeclaration((VariableDeclarationSyntax) syntax);
+            case ifStatement:
+                return bindIfStatment((IfStatementSyntax) syntax);
             
             default:
                 throw new Exception("Unexpected syntax " + syntax.kind());
         }
     }
-
- 
 
     private BoundStatement bindBlockStatement(BlockStatmentSyntax syntax) throws Exception {
         List<BoundStatement> statements = new ArrayList<>();
@@ -94,6 +95,10 @@ public class Binder {
         return new BoundBlockStatement(statements);
     }
 
+    private BoundStatement bindExpressionStatement(ExpressionStatementSyntax syntax) throws Exception{
+        BoundExpression expression = bindExpression(syntax.getExpression());
+        return new BoundExpressionStatement(expression);
+    }
     
     private BoundStatement bindVariableDeclaration(VariableDeclarationSyntax syntax) throws Exception {
         String name = syntax.getIdentifier().getText();
@@ -107,10 +112,24 @@ public class Binder {
         return new BoundVariableDeclaration(variable, intializer);
     }
 
-    private BoundStatement bindExpressionStatement(ExpressionStatementSyntax syntax) throws Exception{
-        BoundExpression expression = bindExpression(syntax.getExpression());
-        return new BoundExpressionStatement(expression);
+    private BoundStatement bindIfStatment(IfStatementSyntax syntax) throws Exception {
+        BoundExpression condition = bindExpression(syntax.getCondition(), Boolean.class);
+        BoundStatement thanStatement = bindStatement(syntax.getThenStatment());
+        BoundStatement elseStatement = syntax.getElseClause() == null ? 
+            null : 
+            bindStatement(syntax.getElseClause().getElseStatement());
+            
+        return new BoundIfStatment(condition,thanStatement,elseStatement);
     }
+
+    private BoundExpression bindExpression(ExpressionSyntax syntax, Class targetType) throws Exception {
+        BoundExpression expression = bindExpression(syntax);
+        if(expression.getType() != targetType)
+            diagnostics.reportVariableCannotConvert(syntax.getSpan(),expression.getType(),targetType);
+        
+        return expression;
+    }
+
 
     private BoundExpression bindExpression(ExpressionSyntax syntax) throws Exception {
 

@@ -80,7 +80,11 @@ public class EvaluationTest {
             Arguments.of("true || true", true),
             Arguments.of("true || false", true),
             
-            Arguments.of("{var a = 0 (a = 10) * a}", 100)
+            Arguments.of("{var a = 0 (a = 10) * a}", 100),
+            Arguments.of("{var a = 0 if a == 0  a = 10 a}", 10),
+            Arguments.of("{var a = 0 if a == 20 a = 10 a}", 0),
+            Arguments.of("{var a = 0 if a == 0  a = 10 else a = 5 a}", 10),
+            Arguments.of("{var a = 0 if a == 20 a = 10 else a = 5 a}", 5)
         );
         
         return list.stream();

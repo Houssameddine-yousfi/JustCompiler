@@ -41,13 +41,16 @@ public enum SyntaxKind {
     falseKeyword,
     letKeyword, 
     varKeyword,
+    ifKeyword, 
+    elseKeyword,
 
     
     // Statments
     blockStatment,
     expressionStatment,
     variableDeclaration, 
-    
+    ifStatement,
+
     // Expressions
     binaryExpression,
     unaryExpression,
@@ -57,5 +60,6 @@ public enum SyntaxKind {
     assignmentExpression,
 
     // Nodes
-    compilationUnit,    
+    compilationUnit,
+    elseClause,     
 }
