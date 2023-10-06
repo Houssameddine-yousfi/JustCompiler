@@ -19,6 +19,7 @@ import com.JsonAjax.justcompiler.Binding.BoundUnaryExpression;
 import com.JsonAjax.justcompiler.Binding.BoundUnaryOperatorKind;
 import com.JsonAjax.justcompiler.Binding.BoundVariableDeclaration;
 import com.JsonAjax.justcompiler.Binding.BoundVariableExpression;
+import com.JsonAjax.justcompiler.Binding.BoundWhileStatement;
 /**
  *
  * @author ajax
@@ -55,12 +56,14 @@ public class Evaluator {
             case ifStatement:
                 evaluateIfStatement((BoundIfStatment) node);
                 break;
+            case whileStatement:
+                evaluateWhileStatement((BoundWhileStatement) node);
+                break;
             
             default:
                 throw new AssertionError("Unexpected Node " + node);
         }
     }
-
 
 
     private void evaluateVariableDeclaration(BoundVariableDeclaration node) {
@@ -85,6 +88,11 @@ public class Evaluator {
             evaluateStatement(node.getThanStatement());
         else if(node.getElseStatement() != null)
             evaluateStatement(node.getElseStatement());
+    }
+
+    private void evaluateWhileStatement(BoundWhileStatement node) {
+        while ((Boolean) evaluateExpression(node.getCondition()))
+            evaluateStatement(node.getBody());
     }
 
     private Object evaluateExpression(BoundExpression node) {

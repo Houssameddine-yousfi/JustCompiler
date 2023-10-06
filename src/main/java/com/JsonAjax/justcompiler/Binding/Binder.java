@@ -24,6 +24,7 @@ import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
 import com.JsonAjax.justcompiler.Syntax.SyntaxNode;
 import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.VariableDeclarationSyntax;
+import com.JsonAjax.justcompiler.Syntax.WhileStatementSyntax;
 
 /**
  * Binder is a type checker. It walks the syntacs tree and create the bound tree
@@ -76,11 +77,14 @@ public class Binder {
                 return bindVariableDeclaration((VariableDeclarationSyntax) syntax);
             case ifStatement:
                 return bindIfStatment((IfStatementSyntax) syntax);
+            case whileStatement:
+                return bindWhileStatement((WhileStatementSyntax) syntax);
             
             default:
                 throw new Exception("Unexpected syntax " + syntax.kind());
         }
     }
+
 
     private BoundStatement bindBlockStatement(BlockStatmentSyntax syntax) throws Exception {
         List<BoundStatement> statements = new ArrayList<>();
@@ -122,11 +126,16 @@ public class Binder {
         return new BoundIfStatment(condition,thanStatement,elseStatement);
     }
 
+    private BoundWhileStatement bindWhileStatement(WhileStatementSyntax syntax) throws Exception {
+        BoundExpression condition = bindExpression(syntax.getCondition(), Boolean.class);
+        BoundStatement body = bindStatement(syntax.getBody());
+        return new BoundWhileStatement(condition, body);
+    }
+
     private BoundExpression bindExpression(ExpressionSyntax syntax, Class targetType) throws Exception {
         BoundExpression expression = bindExpression(syntax);
         if(expression.getType() != targetType)
             diagnostics.reportVariableCannotConvert(syntax.getSpan(),expression.getType(),targetType);
-        
         return expression;
     }
 
@@ -232,6 +241,9 @@ public class Binder {
 
         return new BoundUnaryExpression(boundOperator  , boundOperand);
     }
+
+ 
+
 
     public DiagnosticsBag getDiagnostics() {
         return diagnostics;

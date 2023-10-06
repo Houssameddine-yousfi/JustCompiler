@@ -71,13 +71,15 @@ public class Parser {
                 return parseVariableDeclaration();
             case ifKeyword:
                 return parseIfStatment();
+            case whileKeyword:
+                return parseWhileKeyword();
             default:
                 return parseExpressionStatment();
         }
-        
-        
 
     }
+
+    
 
     private StatementSyntax parseBlockStatement(){
         List<StatementSyntax> statements = new ArrayList<>();
@@ -222,11 +224,16 @@ public class Parser {
         return new ElseClauseSyntax(elseKeyword, elseStatement);
     }
 
+    private WhileStatementSyntax parseWhileKeyword() {
+
+        SyntaxToken keyword = matchToken(SyntaxKind.whileKeyword);
+        ExpressionSyntax condition = parseExpression();
+        StatementSyntax body = parseStatement();
+        return new WhileStatementSyntax(keyword,condition,body);
+    }
+
     public DiagnosticsBag getDiagnostics() {
         return diagnostics; 
     }
 
-    
-    
-    
 }

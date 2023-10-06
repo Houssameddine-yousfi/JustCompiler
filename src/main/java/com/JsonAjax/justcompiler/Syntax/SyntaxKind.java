@@ -43,6 +43,7 @@ public enum SyntaxKind {
     varKeyword,
     ifKeyword, 
     elseKeyword,
+    whileKeyword,
 
     
     // Statments
@@ -50,6 +51,7 @@ public enum SyntaxKind {
     expressionStatment,
     variableDeclaration, 
     ifStatement,
+    whileStatement,
 
     // Expressions
     binaryExpression,
@@ -61,5 +63,5 @@ public enum SyntaxKind {
 
     // Nodes
     compilationUnit,
-    elseClause,     
+    elseClause, 
 }
