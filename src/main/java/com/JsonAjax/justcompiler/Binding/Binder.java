@@ -108,7 +108,7 @@ public class Binder {
     
     private BoundStatement bindVariableDeclaration(VariableDeclarationSyntax syntax) throws Exception {
         String name = syntax.getIdentifier().getText();
-        boolean isReadOnly = syntax.getKeyword().kind() == SyntaxKind.letKeyword;
+        boolean isReadOnly = syntax.getKeyword().kind() == SyntaxKind.constKeyword;
         BoundExpression intializer = bindExpression(syntax.getInitializer());
         VariableSymbol variable = new VariableSymbol(name, isReadOnly, intializer.getType());
         if (!scope.tryDeclare(variable)){

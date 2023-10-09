@@ -66,7 +66,7 @@ public class Parser {
         switch(current().kind()){
             case leftBrace:
                 return parseBlockStatement();
-            case letKeyword:
+            case constKeyword:
             case varKeyword:
                 return parseVariableDeclaration();
             case ifKeyword:
@@ -97,7 +97,7 @@ public class Parser {
     }
 
     private StatementSyntax parseVariableDeclaration() {
-        SyntaxKind expected = current().kind() == SyntaxKind.letKeyword? SyntaxKind.letKeyword: SyntaxKind.varKeyword;
+        SyntaxKind expected = current().kind() == SyntaxKind.constKeyword? SyntaxKind.constKeyword: SyntaxKind.varKeyword;
         SyntaxToken keyword = matchToken(expected);
         SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
         SyntaxToken equals = matchToken(SyntaxKind.equals);

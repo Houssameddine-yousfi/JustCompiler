@@ -56,8 +56,8 @@ public class SyntaxFacts {
                 return SyntaxKind.ifKeyword;
             case "else":
                 return SyntaxKind.elseKeyword;
-            case "let":
-                return SyntaxKind.letKeyword;
+            case "const":
+                return SyntaxKind.constKeyword;
             case "var":
                 return SyntaxKind.varKeyword;
             case "while":
@@ -131,8 +131,8 @@ public class SyntaxFacts {
                 return "false";
             case trueKeyword:
                 return "true";
-            case letKeyword:
-                return "let";
+            case constKeyword:
+                return "const";
             case varKeyword:
                 return "var";
             case ifKeyword:

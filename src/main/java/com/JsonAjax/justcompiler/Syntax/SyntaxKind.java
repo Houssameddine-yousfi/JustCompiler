@@ -39,7 +39,7 @@ public enum SyntaxKind {
     // keywords
     trueKeyword,
     falseKeyword,
-    letKeyword, 
+    constKeyword, 
     varKeyword,
     ifKeyword, 
     elseKeyword,
