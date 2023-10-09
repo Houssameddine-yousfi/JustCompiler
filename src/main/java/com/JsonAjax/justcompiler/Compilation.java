@@ -54,7 +54,14 @@ public class Compilation {
             return new EvaluationResult(diagnostics,null);
         
         Evaluator evaluator = new Evaluator(globalScope.getStatement(), variables);
-        Object value = evaluator.evaluate();
+        
+        Object value;
+        try{
+            value = evaluator.evaluate();
+        }catch (Exception e ){
+            e.printStackTrace();
+            value = 0;
+        };
         return new EvaluationResult(diagnostics, value);
     }
 }
