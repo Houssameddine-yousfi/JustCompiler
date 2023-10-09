@@ -54,8 +54,11 @@ public class Index {
             
 
             if (textBuilder.length() == 0) {
-                if (line.isBlank() || line.isEmpty())
-                    break;
+                if (line.isBlank() || line.isEmpty()){
+                    System.out.println();
+                    continue;
+                }
+                    
 
                 else if (line.equals("#showTree")) {
                     showATree = !showATree;
