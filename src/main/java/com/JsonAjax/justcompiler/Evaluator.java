@@ -12,6 +12,7 @@ import com.JsonAjax.justcompiler.Binding.BoundBinaryOperatorKind;
 import com.JsonAjax.justcompiler.Binding.BoundBlockStatement;
 import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundExpressionStatement;
+import com.JsonAjax.justcompiler.Binding.BoundForStatement;
 import com.JsonAjax.justcompiler.Binding.BoundIfStatment;
 import com.JsonAjax.justcompiler.Binding.BoundLiteralExpression;
 import com.JsonAjax.justcompiler.Binding.BoundStatement;
@@ -59,11 +60,15 @@ public class Evaluator {
             case whileStatement:
                 evaluateWhileStatement((BoundWhileStatement) node);
                 break;
+            case forStatement:
+                evaluateForStatement((BoundForStatement) node);
+                break;
             
             default:
                 throw new AssertionError("Unexpected Node " + node);
         }
     }
+
 
 
     private void evaluateVariableDeclaration(BoundVariableDeclaration node) {
@@ -93,6 +98,18 @@ public class Evaluator {
     private void evaluateWhileStatement(BoundWhileStatement node) {
         while ((Boolean) evaluateExpression(node.getCondition()))
             evaluateStatement(node.getBody());
+    }
+    
+    private void evaluateForStatement(BoundForStatement node) {
+
+        Integer lowerBound = (Integer) evaluateExpression(node.getLowerBound());
+        Integer upperbound = (Integer) evaluateExpression(node.getUpperBound());
+
+        for(int i = lowerBound; i <= upperbound; i++){
+            variables.put(node.getVariable(), i);
+            evaluateStatement(node.getBody());
+        }
+        
     }
 
     private Object evaluateExpression(BoundExpression node) {

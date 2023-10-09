@@ -2,11 +2,9 @@ package com.JsonAjax.justcompiler.Binding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
 
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.VariableSymbol;
 import com.JsonAjax.justcompiler.Syntax.AssignmentExpressionSyntax;
@@ -15,13 +13,13 @@ import com.JsonAjax.justcompiler.Syntax.BlockStatmentSyntax;
 import com.JsonAjax.justcompiler.Syntax.CompilationUnitSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.ExpressionSyntax;
+import com.JsonAjax.justcompiler.Syntax.ForStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.IfStatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.LiteralExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.NameExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.ParenthesizedExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.StatementSyntax;
 import com.JsonAjax.justcompiler.Syntax.SyntaxKind;
-import com.JsonAjax.justcompiler.Syntax.SyntaxNode;
 import com.JsonAjax.justcompiler.Syntax.UnaryExpressionSyntax;
 import com.JsonAjax.justcompiler.Syntax.VariableDeclarationSyntax;
 import com.JsonAjax.justcompiler.Syntax.WhileStatementSyntax;
@@ -79,11 +77,15 @@ public class Binder {
                 return bindIfStatment((IfStatementSyntax) syntax);
             case whileStatement:
                 return bindWhileStatement((WhileStatementSyntax) syntax);
+            case forStatement:
+                return bindForStatement((ForStatementSyntax) syntax);
             
             default:
                 throw new Exception("Unexpected syntax " + syntax.kind());
         }
     }
+
+
 
 
     private BoundStatement bindBlockStatement(BlockStatmentSyntax syntax) throws Exception {
@@ -130,6 +132,21 @@ public class Binder {
         BoundExpression condition = bindExpression(syntax.getCondition(), Boolean.class);
         BoundStatement body = bindStatement(syntax.getBody());
         return new BoundWhileStatement(condition, body);
+    }
+
+    private BoundStatement bindForStatement(ForStatementSyntax syntax) throws Exception {
+        String name = syntax.getIdentifier().getText();
+        BoundExpression lowerBound = bindExpression(syntax.getLowerbound(), Integer.class);
+        BoundExpression upperBound = bindExpression(syntax.getUpperbound(), Integer.class);
+
+        scope = new BoundScope(scope);
+        VariableSymbol variable = new VariableSymbol(name, true, Integer.class);
+        if (!scope.tryDeclare(variable)){
+            diagnostics.reportVariableAlreadyDeclared(syntax.getIdentifier().getSpan(), name);
+        }
+
+        BoundStatement body = bindStatement(syntax.getBody());
+        return new BoundForStatement(variable, lowerBound, upperBound, body);
     }
 
     private BoundExpression bindExpression(ExpressionSyntax syntax, Class targetType) throws Exception {

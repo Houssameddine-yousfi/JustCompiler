@@ -73,6 +73,8 @@ public class Parser {
                 return parseIfStatment();
             case whileKeyword:
                 return parseWhileKeyword();
+            case forKeyword:
+                return parseForKeyword();
             default:
                 return parseExpressionStatment();
         }
@@ -80,7 +82,6 @@ public class Parser {
     }
 
     
-
     private StatementSyntax parseBlockStatement(){
         List<StatementSyntax> statements = new ArrayList<>();
         SyntaxToken leftBraceToken = matchToken(SyntaxKind.leftBrace);
@@ -231,6 +232,20 @@ public class Parser {
         StatementSyntax body = parseStatement();
         return new WhileStatementSyntax(keyword,condition,body);
     }
+
+    private ForStatementSyntax parseForKeyword() {
+        
+        SyntaxToken forKeword = matchToken(SyntaxKind.forKeyword);
+        SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
+        SyntaxToken equalsToken = matchToken(SyntaxKind.equals);
+        ExpressionSyntax lowerBound = parseExpression() ;
+        SyntaxToken toKeyword = matchToken(SyntaxKind.toKeyword);
+        ExpressionSyntax upperbound = parseExpression();
+        StatementSyntax body = parseStatement();
+         
+        return new ForStatementSyntax(forKeword,identifier,equalsToken,lowerBound,toKeyword,upperbound,body);
+    }
+
 
     public DiagnosticsBag getDiagnostics() {
         return diagnostics; 

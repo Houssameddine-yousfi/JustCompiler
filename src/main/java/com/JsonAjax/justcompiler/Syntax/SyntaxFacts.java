@@ -62,6 +62,10 @@ public class SyntaxFacts {
                 return SyntaxKind.varKeyword;
             case "while":
                 return SyntaxKind.whileKeyword;
+            case "for":
+                return SyntaxKind.forKeyword;
+            case "to":
+                return SyntaxKind.toKeyword;
             default:
                 return SyntaxKind.identifierToken;
         }
@@ -137,6 +141,10 @@ public class SyntaxFacts {
                 return "else";
             case whileKeyword:
                 return "while";
+            case forKeyword:
+                return "for";
+            case toKeyword:
+                return "to";
             default:
                 return null;
         }

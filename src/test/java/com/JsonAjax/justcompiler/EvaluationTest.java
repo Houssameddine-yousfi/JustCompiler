@@ -85,7 +85,8 @@ public class EvaluationTest {
             Arguments.of("{var a = 0 if a == 20 a = 10 a}", 0),
             Arguments.of("{var a = 0 if a == 0  a = 10 else a = 5 a}", 10),
             Arguments.of("{var a = 0 if a == 20 a = 10 else a = 5 a}", 5),
-            Arguments.of("{ var a =5 while a<=10 a=a+1 a }", 11)
+            Arguments.of("{ var a =5 while a<=10 a=a+1 a }", 11),
+            Arguments.of("{var result=0 for i = 1 to 10 { result = result + i } result }", 55)
             
         );
         
@@ -144,6 +145,63 @@ public class EvaluationTest {
         String diagnostics = "Cannot convert type 'class java.lang.Boolean' to type 'class java.lang.Integer'.";
         assertHasDiagnostics(text, diagnostics);
     }
+
+    @Test
+    public void Evaluator_ifStatment_Reports_CannotConvert(){
+        String text = """
+            {
+                var x = 0
+                if [10]
+                    x = 10
+            }
+        """;
+
+        String diagnostics = "Cannot convert type 'class java.lang.Integer' to type 'class java.lang.Boolean'.";
+        assertHasDiagnostics(text, diagnostics);
+    }
+
+    @Test
+    public void Evaluator_WileStatment_Reports_CannotConvert(){
+        String text = """
+            {
+                var x = 0
+                while [10]
+                    x = 10
+            }
+        """;
+
+        String diagnostics = "Cannot convert type 'class java.lang.Integer' to type 'class java.lang.Boolean'.";
+        assertHasDiagnostics(text, diagnostics);
+    }
+
+    @Test
+    public void Evaluator_ForStatment_Reports_CannotConvert_LowerBound(){
+        String text = """
+            {
+                var x = 0
+                for i = [false] to 10
+                    x = 10
+            }
+        """;
+
+        String diagnostics = "Cannot convert type 'class java.lang.Boolean' to type 'class java.lang.Integer'.";
+        assertHasDiagnostics(text, diagnostics);
+    }
+
+    @Test
+    public void Evaluator_ForStatment_Reports_CannotConvert_UpperBound(){
+        String text = """
+            {
+                var x = 0
+                for i = 5 to [true]
+                    x = 10
+            }
+        """;
+
+        String diagnostics = "Cannot convert type 'class java.lang.Boolean' to type 'class java.lang.Integer'.";
+        assertHasDiagnostics(text, diagnostics);
+    }
+
 
     @Test
     public void Evaluator_Unary_Reports_Undefined(){

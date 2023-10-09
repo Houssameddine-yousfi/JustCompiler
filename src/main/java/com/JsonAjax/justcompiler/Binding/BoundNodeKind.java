@@ -7,7 +7,8 @@ public enum BoundNodeKind {
     expressionStatement,
     boundVariableDeclaration,
     ifStatement,
-    whileStatement, 
+    whileStatement,
+    forStatement,
 
     //expressions
     UnaryExpression, LiteralExpression, BinaryExpression, VariableExpression, AssignmentExpression, 

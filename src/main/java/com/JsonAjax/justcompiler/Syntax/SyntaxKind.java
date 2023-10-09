@@ -44,7 +44,8 @@ public enum SyntaxKind {
     ifKeyword, 
     elseKeyword,
     whileKeyword,
-
+    forKeyword, 
+    toKeyword,
     
     // Statments
     blockStatment,
@@ -52,6 +53,8 @@ public enum SyntaxKind {
     variableDeclaration, 
     ifStatement,
     whileStatement,
+    forStatement,
+    
 
     // Expressions
     binaryExpression,
@@ -63,5 +66,5 @@ public enum SyntaxKind {
 
     // Nodes
     compilationUnit,
-    elseClause, 
+    elseClause,
 }
