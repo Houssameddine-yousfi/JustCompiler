@@ -88,8 +88,19 @@ public class Parser {
 
         while(current().kind() != SyntaxKind.endOfFile 
             && current().kind() != SyntaxKind.rightBrace){
+                
+                SyntaxToken startToken = current();
+                
                 StatementSyntax statement = parseStatement();
                 statements.add(statement);
+
+                // If ParseStatement() did not consume any tokens,
+                // we need to skip the current token and continue
+                // in order to avoid an infinite loop.
+                // we don't need to report error, because we already
+                // tried to parse an expression statement.
+                if(current() == startToken) 
+                    nextToken();
         }
 
         SyntaxToken rightBraceToken = matchToken(SyntaxKind.rightBrace);

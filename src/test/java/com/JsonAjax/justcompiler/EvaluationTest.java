@@ -124,7 +124,7 @@ public class EvaluationTest {
     public void Evaluator_Assignment_Reports_CannotAssign(){
         String text = """
             {
-                let x = 5
+                const x = 5
                 x [=] 10
             }
         """;
@@ -199,6 +199,21 @@ public class EvaluationTest {
         """;
 
         String diagnostics = "Cannot convert type 'class java.lang.Boolean' to type 'class java.lang.Integer'.";
+        assertHasDiagnostics(text, diagnostics);
+    }
+
+    @Test
+    public void Evaluator_BlockStatement_NotInfinitLoop(){
+        String text = """
+            {
+            [)][]
+        """;
+
+        String diagnostics = """
+            Unexpected token <rightParen>, expected <number>.
+            Unexpected token <endOfFile>, expected <rightBrace>.
+            """;
+                
         assertHasDiagnostics(text, diagnostics);
     }
 
