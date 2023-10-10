@@ -17,6 +17,10 @@ public class SyntaxFacts {
 
             case equalsEquals:
             case bangEquals:
+            case less:
+            case lessOrEquals:
+            case greater:
+            case greaterOrEquals:
                 return 3;
 
             case ampersandAmpersand:
@@ -48,10 +52,20 @@ public class SyntaxFacts {
                 return SyntaxKind.trueKeyword;
             case "false":
                 return SyntaxKind.falseKeyword;
-            case "let":
-                return SyntaxKind.letKeyword;
+            case "if":
+                return SyntaxKind.ifKeyword;
+            case "else":
+                return SyntaxKind.elseKeyword;
+            case "const":
+                return SyntaxKind.constKeyword;
             case "var":
                 return SyntaxKind.varKeyword;
+            case "while":
+                return SyntaxKind.whileKeyword;
+            case "for":
+                return SyntaxKind.forKeyword;
+            case "to":
+                return SyntaxKind.toKeyword;
             default:
                 return SyntaxKind.identifierToken;
         }
@@ -105,14 +119,32 @@ public class SyntaxFacts {
                 return  "!=";
             case equalsEquals:
                 return "==";
+            case less:
+                return "<";
+            case lessOrEquals:
+                return "<=";
+            case greater:
+                return ">";
+            case greaterOrEquals:
+                return ">=";
             case falseKeyword:
                 return "false";
             case trueKeyword:
                 return "true";
-            case letKeyword:
-                return "let";
+            case constKeyword:
+                return "const";
             case varKeyword:
                 return "var";
+            case ifKeyword:
+                return "if";
+            case elseKeyword:
+                return "else";
+            case whileKeyword:
+                return "while";
+            case forKeyword:
+                return "for";
+            case toKeyword:
+                return "to";
             default:
                 return null;
         }

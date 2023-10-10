@@ -60,13 +60,7 @@ public class SyntaxToken extends SyntaxNode{
         return new ArrayList<>();
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
-    
-    
+
     
     
 }

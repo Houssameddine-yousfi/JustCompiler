@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class ExpressionStatementSyntax extends StatementSyntax {
@@ -19,11 +18,6 @@ public class ExpressionStatementSyntax extends StatementSyntax {
         return SyntaxKind.expressionStatment;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
 
     @Override
     public List<SyntaxNode> getChildren() {

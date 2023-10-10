@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +39,7 @@ public class BlockStatmentSyntax extends StatementSyntax{
     }
 
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
+
 
 
     @Override

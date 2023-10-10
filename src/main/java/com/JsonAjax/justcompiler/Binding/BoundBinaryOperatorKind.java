@@ -8,5 +8,9 @@ public enum BoundBinaryOperatorKind {
     LogicalAnd, 
     LogicalOr, 
     Equals, 
-    NotEquals
+    NotEquals, 
+    less, 
+    lessOrEquals, 
+    greater, 
+    greaterOrEquals
 }

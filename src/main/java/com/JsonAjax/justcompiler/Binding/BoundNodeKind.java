@@ -5,9 +5,12 @@ public enum BoundNodeKind {
     //statments
     blockStatment,
     expressionStatement,
-    BoundVariableDeclaration,
+    boundVariableDeclaration,
+    ifStatement,
+    whileStatement,
+    forStatement,
 
     //expressions
-    UnaryExpression, LiteralExpression, BinaryExpression, VariableExpression, AssignmentExpression,
+    UnaryExpression, LiteralExpression, BinaryExpression, VariableExpression, AssignmentExpression, 
     
 }

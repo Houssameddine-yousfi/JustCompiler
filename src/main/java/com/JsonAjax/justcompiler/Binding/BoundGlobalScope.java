@@ -2,7 +2,6 @@ package com.JsonAjax.justcompiler.Binding;
 
 import java.util.List;
 
-import com.JsonAjax.justcompiler.Diagnostic;
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.VariableSymbol;
 

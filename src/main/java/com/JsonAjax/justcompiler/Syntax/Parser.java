@@ -7,6 +7,7 @@ package com.JsonAjax.justcompiler.Syntax;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.JsonAjax.justcompiler.DiagnosticsBag;
 import com.JsonAjax.justcompiler.Text.SourceText;
 
@@ -66,25 +67,41 @@ public class Parser {
         switch(current().kind()){
             case leftBrace:
                 return parseBlockStatement();
-            case letKeyword:
+            case constKeyword:
             case varKeyword:
                 return parseVariableDeclaration();
+            case ifKeyword:
+                return parseIfStatment();
+            case whileKeyword:
+                return parseWhileKeyword();
+            case forKeyword:
+                return parseForKeyword();
             default:
                 return parseExpressionStatment();
         }
-        
-        
 
     }
 
+    
     private StatementSyntax parseBlockStatement(){
         List<StatementSyntax> statements = new ArrayList<>();
         SyntaxToken leftBraceToken = matchToken(SyntaxKind.leftBrace);
 
         while(current().kind() != SyntaxKind.endOfFile 
             && current().kind() != SyntaxKind.rightBrace){
+                
+                SyntaxToken startToken = current();
+                
                 StatementSyntax statement = parseStatement();
                 statements.add(statement);
+
+                // If ParseStatement() did not consume any tokens,
+                // we need to skip the current token and continue
+                // in order to avoid an infinite loop.
+                // we don't need to report error, because we already
+                // tried to parse an expression statement.
+                if(current() == startToken) 
+                    nextToken();
         }
 
         SyntaxToken rightBraceToken = matchToken(SyntaxKind.rightBrace);
@@ -92,7 +109,7 @@ public class Parser {
     }
 
     private StatementSyntax parseVariableDeclaration() {
-        SyntaxKind expected = current().kind() == SyntaxKind.letKeyword? SyntaxKind.letKeyword: SyntaxKind.varKeyword;
+        SyntaxKind expected = current().kind() == SyntaxKind.constKeyword? SyntaxKind.constKeyword: SyntaxKind.varKeyword;
         SyntaxToken keyword = matchToken(expected);
         SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
         SyntaxToken equals = matchToken(SyntaxKind.equals);
@@ -177,6 +194,8 @@ public class Parser {
         }
     }
 
+ 
+
     private ExpressionSyntax parseNumberLiteral() {
         SyntaxToken numberToken = matchToken(SyntaxKind.number);
         return new LiteralExpressionSyntax(numberToken,numberToken.getValue());
@@ -200,11 +219,48 @@ public class Parser {
         return new NameExpressionSyntax(identifierToken);
     }
 
+    private IfStatementSyntax parseIfStatment() {
+        SyntaxToken keyword = matchToken(SyntaxKind.ifKeyword);
+        ExpressionSyntax condition  = parseExpression();
+        StatementSyntax statment = parseStatement();
+        ElseClauseSyntax elseClause = parseElseClause();
+
+        return new IfStatementSyntax(keyword, condition, statment, elseClause);
+    }
+
+    private ElseClauseSyntax parseElseClause() {
+        if(current().kind() != SyntaxKind.elseKeyword)
+            return null;
+        
+        SyntaxToken elseKeyword = matchToken(SyntaxKind.elseKeyword);
+        StatementSyntax elseStatement = parseStatement();
+        return new ElseClauseSyntax(elseKeyword, elseStatement);
+    }
+
+    private WhileStatementSyntax parseWhileKeyword() {
+
+        SyntaxToken keyword = matchToken(SyntaxKind.whileKeyword);
+        ExpressionSyntax condition = parseExpression();
+        StatementSyntax body = parseStatement();
+        return new WhileStatementSyntax(keyword,condition,body);
+    }
+
+    private ForStatementSyntax parseForKeyword() {
+        
+        SyntaxToken forKeword = matchToken(SyntaxKind.forKeyword);
+        SyntaxToken identifier = matchToken(SyntaxKind.identifierToken);
+        SyntaxToken equalsToken = matchToken(SyntaxKind.equals);
+        ExpressionSyntax lowerBound = parseExpression() ;
+        SyntaxToken toKeyword = matchToken(SyntaxKind.toKeyword);
+        ExpressionSyntax upperbound = parseExpression();
+        StatementSyntax body = parseStatement();
+         
+        return new ForStatementSyntax(forKeword,identifier,equalsToken,lowerBound,toKeyword,upperbound,body);
+    }
+
+
     public DiagnosticsBag getDiagnostics() {
         return diagnostics; 
     }
 
-    
-    
-    
 }

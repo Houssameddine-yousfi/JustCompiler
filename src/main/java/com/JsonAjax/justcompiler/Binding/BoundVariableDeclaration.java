@@ -30,7 +30,7 @@ public class BoundVariableDeclaration extends BoundStatement{
 
     @Override
     public BoundNodeKind getKind() {
-        return BoundNodeKind.BoundVariableDeclaration;
+        return BoundNodeKind.boundVariableDeclaration;
     }
     
 }

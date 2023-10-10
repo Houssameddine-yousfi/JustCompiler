@@ -54,8 +54,11 @@ public class Index {
             
 
             if (textBuilder.length() == 0) {
-                if (line.isBlank() || line.isEmpty())
-                    break;
+                if (line.isBlank() || line.isEmpty()){
+                    System.out.println();
+                    continue;
+                }
+                    
 
                 else if (line.equals("#showTree")) {
                     showATree = !showATree;
@@ -93,7 +96,7 @@ public class Index {
             DiagnosticsBag diagnostics = result.getDiagnostics();
 
             if (showATree)
-                ast.getRoot().prettyPrint("", System.out);
+                ast.getRoot().prettyPrint(System.out);
 
             // if we find errors we display them else we evaluate
             if (!diagnostics.isEmpty()) {

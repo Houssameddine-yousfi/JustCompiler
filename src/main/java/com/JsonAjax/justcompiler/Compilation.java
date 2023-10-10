@@ -3,9 +3,7 @@ package com.JsonAjax.justcompiler;
 import java.util.Map;
 
 import com.JsonAjax.justcompiler.Binding.Binder;
-import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundGlobalScope;
-import com.JsonAjax.justcompiler.Syntax.SyntaxToken;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
 
 public class Compilation {
@@ -54,7 +52,14 @@ public class Compilation {
             return new EvaluationResult(diagnostics,null);
         
         Evaluator evaluator = new Evaluator(globalScope.getStatement(), variables);
-        Object value = evaluator.evaluate();
+        
+        Object value;
+        try{
+            value = evaluator.evaluate();
+        }catch (Exception e ){
+            e.printStackTrace();
+            value = 0;
+        };
         return new EvaluationResult(diagnostics, value);
     }
 }

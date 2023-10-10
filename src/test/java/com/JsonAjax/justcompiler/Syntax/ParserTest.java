@@ -1,8 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -10,7 +7,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import com.JsonAjax.justcompiler.Syntax.TestUtils.AssertingList;
+
+import com.JsonAjax.justcompiler.TestUtils.AssertingList;
  
 public class ParserTest {
 

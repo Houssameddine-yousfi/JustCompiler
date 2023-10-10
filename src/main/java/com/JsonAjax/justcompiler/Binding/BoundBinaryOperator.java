@@ -52,6 +52,12 @@ public final class BoundBinaryOperator {
         new BoundBinaryOperator(SyntaxKind.pipePipe, BoundBinaryOperatorKind.LogicalOr, Boolean.class),
         new BoundBinaryOperator(SyntaxKind.equalsEquals, BoundBinaryOperatorKind.Equals, Boolean.class),
         new BoundBinaryOperator(SyntaxKind.bangEquals, BoundBinaryOperatorKind.NotEquals, Boolean.class),
+
+        new BoundBinaryOperator(SyntaxKind.less, BoundBinaryOperatorKind.less, Integer.class, Integer.class, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.lessOrEquals, BoundBinaryOperatorKind.lessOrEquals, Integer.class, Integer.class, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.greater, BoundBinaryOperatorKind.greater, Integer.class, Integer.class, Boolean.class),
+        new BoundBinaryOperator(SyntaxKind.greaterOrEquals, BoundBinaryOperatorKind.greaterOrEquals, Integer.class, Integer.class, Boolean.class),
+
         new BoundBinaryOperator(SyntaxKind.equalsEquals, BoundBinaryOperatorKind.Equals, Integer.class, Integer.class, Boolean.class),
         new BoundBinaryOperator(SyntaxKind.bangEquals, BoundBinaryOperatorKind.NotEquals, Integer.class, Integer.class, Boolean.class),
     };
