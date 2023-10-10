@@ -3,9 +3,7 @@ package com.JsonAjax.justcompiler;
 import java.util.Map;
 
 import com.JsonAjax.justcompiler.Binding.Binder;
-import com.JsonAjax.justcompiler.Binding.BoundExpression;
 import com.JsonAjax.justcompiler.Binding.BoundGlobalScope;
-import com.JsonAjax.justcompiler.Syntax.SyntaxToken;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
 
 public class Compilation {

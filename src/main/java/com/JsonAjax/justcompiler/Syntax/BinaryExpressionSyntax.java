@@ -5,7 +5,6 @@
  */
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,15 +31,7 @@ public class BinaryExpressionSyntax extends ExpressionSyntax{
         return SyntaxKind.binaryExpression;
     }
     
-    @Override
-    public void prettyPrint(String indentation,PrintStream printStream){
-        printStream.println( "BinaryExpression");
-        printStream.print(indentation+"├──");
-        left.prettyPrint("│   " + indentation, printStream);
-        printStream.println(indentation+"├──" + operatorToken.kind());
-        printStream.print(indentation+"└──");
-        right.prettyPrint(indentation + "    " , printStream);   
-    }
+
 
     public ExpressionSyntax getLeft() {
         return left;

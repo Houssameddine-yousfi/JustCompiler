@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class WhileStatementSyntax extends StatementSyntax{
@@ -40,11 +39,7 @@ public class WhileStatementSyntax extends StatementSyntax{
         return SyntaxKind.whileStatement;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
+
 
     @Override
     public List<SyntaxNode> getChildren() {

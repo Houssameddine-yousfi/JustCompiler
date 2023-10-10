@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class CompilationUnitSyntax extends SyntaxNode {
@@ -28,13 +27,7 @@ public class CompilationUnitSyntax extends SyntaxNode {
         return SyntaxKind.compilationUnit;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        printStream.println( "CompilationUnit");
-        
-        printStream.print(indentation+"└──");
-        statement.prettyPrint(indentation + "    ", printStream);
-    }
+
 
     @Override
     public List<SyntaxNode> getChildren() {

@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class VariableDeclarationSyntax extends StatementSyntax{
@@ -41,15 +40,8 @@ public class VariableDeclarationSyntax extends StatementSyntax{
     }
 
     @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
-
-    @Override
     public List<SyntaxNode> getChildren() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getChildren'");
+        return List.of(keyword,identifier,equalsToken,initializer);
     }
 
 

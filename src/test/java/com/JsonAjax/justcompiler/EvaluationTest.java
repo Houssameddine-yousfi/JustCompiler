@@ -10,15 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import javax.management.RuntimeErrorException;
-import javax.swing.Spring;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.JsonAjax.justcompiler.Syntax.Parser;
 import com.JsonAjax.justcompiler.Syntax.SyntaxTree;
 import com.JsonAjax.justcompiler.Text.AnnotatedText;
 import com.JsonAjax.justcompiler.Text.TextSpan;

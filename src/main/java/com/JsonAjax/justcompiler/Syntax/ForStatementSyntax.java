@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class ForStatementSyntax extends StatementSyntax{
@@ -59,12 +58,7 @@ public class ForStatementSyntax extends StatementSyntax{
         return SyntaxKind.forStatement;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
-    
+
     @Override
     public List<SyntaxNode> getChildren() {
         return List.of(forkeyword,identifier,equalsToken,lowerbound,upperbound);

@@ -96,7 +96,7 @@ public class Index {
             DiagnosticsBag diagnostics = result.getDiagnostics();
 
             if (showATree)
-                ast.getRoot().prettyPrint("", System.out);
+                ast.getRoot().prettyPrint(System.out);
 
             // if we find errors we display them else we evaluate
             if (!diagnostics.isEmpty()) {

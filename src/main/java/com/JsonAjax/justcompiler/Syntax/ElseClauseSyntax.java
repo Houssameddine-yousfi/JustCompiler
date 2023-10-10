@@ -1,6 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class ElseClauseSyntax extends SyntaxNode {
@@ -34,11 +33,7 @@ public class ElseClauseSyntax extends SyntaxNode {
         return SyntaxKind.elseClause;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
+
 
     @Override
     public List<SyntaxNode> getChildren() {

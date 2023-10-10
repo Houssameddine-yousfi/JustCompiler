@@ -1,7 +1,5 @@
 package com.JsonAjax.justcompiler.Syntax;
 
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IfStatementSyntax extends StatementSyntax{
@@ -61,11 +59,7 @@ public class IfStatementSyntax extends StatementSyntax{
         return SyntaxKind.ifStatement;
     }
 
-    @Override
-    public void prettyPrint(String indentation, PrintStream printStream) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
-    }
+
 
     @Override
     public List<SyntaxNode> getChildren() {
