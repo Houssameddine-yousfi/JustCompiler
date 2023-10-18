@@ -61,7 +61,7 @@ public class ForStatementSyntax extends StatementSyntax{
 
     @Override
     public List<SyntaxNode> getChildren() {
-        return List.of(forkeyword,identifier,equalsToken,lowerbound,upperbound);
+        return List.of(forkeyword,identifier,equalsToken,lowerbound,toKeyword,upperbound,body);
     }
 
     
